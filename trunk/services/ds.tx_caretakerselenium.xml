@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- 
+/**
+ * This is a file of the caretaker project.
+ * Copyright 2008 by n@work Internet Informationssystem GmbH (www.work.de)
+ * 
+ * @Author	Thomas Hempel 		<thomas@work.de>
+ * @Author	Martin Ficzel		<martin@work.de>
+ * @Author	Patrick Kollodzik	<patrick@work.de>
+ * 
+ * $$Id: ds.tx_caretaker_typo3_extensions.xml 33 2008-06-13 14:00:38Z thomas $$
+ */
+-->
+
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+			<ROOT>
+				<TCEforms> 
+                        <sheetTitle>Default</sheetTitle> 
+                </TCEforms> 
+				<type>array</type>
+				<el>
+					<selenium_configuration>
+						<TCEforms>
+							<label>Selenese Configuration</label>
+							<config>
+								<type>text</type>
+								<rows>10</rows>
+							</config>
+						</TCEforms>
+					</selenium_configuration>
+					
+					<selenium_configuration>
+						<TCEforms>
+							<label>Selenese Configuration</label>
+							<config>
+								<type>text</type>
+								<rows>10</rows>
+							</config>
+						</TCEforms>
+					</selenium_configuration>		
+				
+					<response_time_error>
+						<TCEforms>
+							<label>Maximal allowed Response Time in Milliseconds</label>
+							<config>
+								<type>input</type>
+								<eval>int</eval>
+								<size>10</size>
+							</config>
+						</TCEforms>
+					</response_time_error>
+					
+					<response_time_warning>
+						<TCEforms>
+							<label>Milliseconds for Warning</label>
+							<config>
+								<type>input</type>
+								<size>10</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</response_time_warning>
+
+				</el>
+			</ROOT>
+
+</T3DataStructure>
