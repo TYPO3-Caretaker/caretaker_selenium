@@ -1,0 +1,12 @@
+# cat=unittest/http; type=string; label= Host of Selenium Server for Unittest
+unittest.host = localhost
+
+# cat=unittest/http; type=string; label= Browser-ID for Unittest 
+unittest.browser  = *firefox
+
+# cat=unittest/ping; type=string; label= Test Domain (request root)
+unittest.baseURL = http://seleniumhq.org
+
+# cat=unittest/ping; type=string; label= Test Query
+unittest.testQuery = projects/
+

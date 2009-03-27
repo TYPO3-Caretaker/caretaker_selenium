@@ -33,19 +33,9 @@
 						</TCEforms>
 					</selenium_configuration>
 					
-					<selenium_configuration>
-						<TCEforms>
-							<label>Selenese Configuration</label>
-							<config>
-								<type>text</type>
-								<rows>10</rows>
-							</config>
-						</TCEforms>
-					</selenium_configuration>		
-				
 					<response_time_error>
 						<TCEforms>
-							<label>Maximal allowed Response Time in Milliseconds</label>
+							<label>Maximal allowed Response Time in Seconds</label>
 							<config>
 								<type>input</type>
 								<eval>int</eval>
@@ -56,7 +46,7 @@
 					
 					<response_time_warning>
 						<TCEforms>
-							<label>Milliseconds for Warning</label>
+							<label>Warning Response Time in Seconds</label>
 							<config>
 								<type>input</type>
 								<size>10</size>
@@ -65,6 +55,28 @@
 						</TCEforms>
 					</response_time_warning>
 
+					<selenium_server>
+						<TCEforms>
+							<label>Select Selenium Server</label>
+							<config>
+								<type>select</type>
+								<foreign_table>tx_caretakerselenium_server</foreign_table>
+								<!-- 
+								<items> 
+									<numIndex index="0"> 
+										<numIndex index="0">All Servers</numIndex> 
+										<numIndex index="1">-1</numIndex> 
+									</numIndex> 
+                                </items> 
+                                -->
+								<maxitems>9</maxitems>
+								<minitems>1</minitems>
+								<size>5</size>
+								<default>0</default>
+							</config>
+						</TCEforms>
+					</selenium_server>
+					
 				</el>
 			</ROOT>
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- 
+/**
+ * This is a file of the caretaker project.
+ * Copyright 2008 by n@work Internet Informationssystem GmbH (www.work.de)
+ * 
+ * @Author	Thomas Hempel 		<thomas@work.de>
+ * @Author	Martin Ficzel		<martin@work.de>
+ * @Author	Tobias Liebig		<mail_typo3.org@etobi.de>
+ * @Author	Christopher Hlubek 	<hlubek@networkteam.com>
+ * @Author	Patrick Kollodzik	<patrick@work.de>
+ * 
+ * $$Id: locallang_db.xml 46 2008-06-19 16:09:17Z martin $$
+ */
+-->
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'caretaker'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			
+			<label index="tx_caretakerselenium_server">Selenium Server</label>
+			<label index="tx_caretakerselenium_server.title">Title</label>
+			<label index="tx_caretakerselenium_server.hostname">Hostname / IP</label>
+			<label index="tx_caretakerselenium_server.browser">Browser Key</label>
+
+			
+		</languageKey>
+		<languageKey index="de" type="array">
+
+		</languageKey>
+	</data>
+</T3locallang>
