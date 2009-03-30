@@ -39,8 +39,9 @@ class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
 	}
 	
 	function test_selenium_testservice(){
-
-		$test = new tx_caretaker_Test(9990, 'title', false ,'tx_caretakerselenium', 
+		
+		$instance = new tx_caretaker_Instance(9990, 'title', false, $this->baseURL, '');
+		$test = new tx_caretaker_Test(9990, 'title', $instance ,'tx_caretakerselenium', 
 			array(
 				'selenium_configuration' => 'open:
 										-'.$test_query.'
@@ -56,7 +57,7 @@ class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
 				),
 			)
 		);
-		$instance = new tx_caretaker_Instance(9990, 'title', false, $this->baseURL, '');
+		
 		$result   = $test->runTest($instance);
 		$this->assertEquals( $result->getState(), TX_CARETAKER_STATE_OK, 'State was not OK' );
 	}
