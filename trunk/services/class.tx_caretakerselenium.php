@@ -38,6 +38,10 @@ require_once (t3lib_extMgm::extPath('caretaker_selenium').'classes/class.tx_care
 
 class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 	
+	function __construct(){
+		$this->valueDescription = "Seconds";
+	}
+	
 	/*
 	 * @TODO: add handling of multiple selenium Servers
 	 */
