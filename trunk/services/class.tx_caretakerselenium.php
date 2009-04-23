@@ -42,10 +42,6 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 		$this->valueDescription = "Seconds";
 	}
 	
-	/*
-	 * @TODO: add handling of multiple selenium Servers
-	 */
-	
 	public function runTest(){
 				
 		$commands     = $this->getConfigValue('selenium_configuration');
@@ -54,50 +50,73 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 
 		$server       = $this->getConfigValue('selenium_server');
 		
-		$host    = false;
-		$browser = false;
+		$servers = array();
 		
 		if (is_array($server)){
-			$host    = $server['host'];
-			$browser = $server['browser'];
+			$servers[] = array(
+				'host'    => $server['host'],
+				'browser' => $server['browser']
+			);
 		} else {
 			$server_ids = explode(',',$server);
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$server_ids[0]);
 			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			if ($row){
-				$host    = $row['hostname'];
-				$browser = $row['browser'];
+				$servers[] = array(
+					'host'    => $row['hostname'],
+					'browser' => $row['browser']
+				);
 			}
 		}
 
-		if (!$host || !$browser) {
+		if (count($servers) == 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
 		}
 		
 		$baseURL = $this->instance->getUrl(); 
 		
-		$starttime = microtime(true);
-		
-		$test = new tx_caretakerselenium_SeleniumTest($commands,$browser,$baseURL,$host);
-		list($result, $msg) = $test->run();
-		
-		$stoptime = microtime(true);
-		
-		if ($result){
+		$results  = array();
+		foreach ($servers as $server){
+			$starttime = microtime(true);
+			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
+			list($success, $msg) = $test->run();
+			$stoptime = microtime(true);
 			$time = $stoptime - $starttime;
-			
+			$results[]  = array( 
+				'success'  => $success,
+				'message'  => $server['host'].':'.$server['browser'].' '.$msg.' ('.$time.' Seconds)',
+				'time'     => $time
+			);
+		}
+		
+		list($success, $time, $message) = $this->getAggregatedResults($results);
+		
+		if ($success){
 			if ($time > $error_time )  {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $time, 'Selenium took '.$time.' Seconds');
+				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $time, $message);
 			} else if ($time > $warning_time) {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $time, 'Selenium took '.$time.' Seconds');
+				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $time, $message);
 			} else {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_OK, $time, 'OK');
+				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_OK, $time, $message);
 			}
 		}else{
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium Test failed: '.$msg);
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, $message);
 		}
 		
 		return $testResult;
+	}
+	
+	function getAggregatedResults ($results){
+		$sucess      = true;
+		$time  = 0;
+		$message    = '';
+		foreach ($results as $result){
+			if ($result['success'] == false ) $sucess = false;
+			if ($result['time']     > $time ) $time   = $result['time'];
+			$message .= $result['message'].chr(10);
+		}
+		return array($sucess,$time, $message );
+				
 	}
 }
 
