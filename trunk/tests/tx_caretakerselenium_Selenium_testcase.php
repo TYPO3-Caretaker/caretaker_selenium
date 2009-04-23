@@ -1,7 +1,7 @@
 <?php 
 
-require_once (t3lib_extMgm::extPath('caretaker').'classes/class.tx_caretaker_Test.php');
-require_once (t3lib_extMgm::extPath('caretaker').'classes/class.tx_caretaker_Instance.php');
+require_once (t3lib_extMgm::extPath('caretaker').'classes/nodes/class.tx_caretaker_Test.php');
+require_once (t3lib_extMgm::extPath('caretaker').'classes/nodes/class.tx_caretaker_Instance.php');
 require_once (t3lib_extMgm::extPath('caretaker_selenium').'classes/class.tx_caretakerselenium_SeleniumTest.php');
 
 class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
@@ -50,7 +50,7 @@ class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
 										-20000	
 										',
 				'response_time_error' => 60,
-				'response_time_warning' => 8,
+				'response_time_warning' => 20,
 				'selenium_server'=>array(
 					'host'=>$this->selenium_host, 
 					'browser'=>$this->browser 
