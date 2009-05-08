@@ -97,6 +97,7 @@ class tx_caretakerselenium_Selenium
     {
         $result = $this->doCommand("getNewBrowserSession", array($this->browser, $this->browserUrl));
         if (strlen($result) > 3) {
+        	
         	$this->sessionId = substr($result, 3);
         	return $this->sessionId;
         } else {
