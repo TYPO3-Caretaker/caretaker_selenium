@@ -50,7 +50,7 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 
 		$server       = $this->getConfigValue('selenium_server');
 		
-		print_r($server);
+		var_dump($server);
 		
 		$servers = array();
 		
