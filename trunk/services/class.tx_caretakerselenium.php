@@ -67,17 +67,17 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 			
 			foreach($server_ids as $sid) {
 				
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
-			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-			
-			if($row) {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				
-				$servers[] = array(
-					'host'    => $row['hostname'],
-					'browser' => $row['browser']
-				);
+				if($row) {
+					
+					$servers[] = array(
+						'host'    => $row['hostname'],
+						'browser' => $row['browser']
+					);
+				}
 			}
-			
 		}
 		
 		print_r($servers);
