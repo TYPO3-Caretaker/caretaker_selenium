@@ -53,41 +53,27 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 		$servers = array();
 		
 		if (is_array($server)){
-			
-			foreach ($server as $oneServer) {
-				
-				$servers[] = array(
-					'host'    => $oneServer['host'],
-					'browser' => $oneServer['browser']
-				);
-			}
-			
+			$servers[] = array(
+				'host'    => $server['host'],
+				'browser' => $server['browser']
+			);
 		} else {
 			$server_ids = explode(',',$server);
-			
-			foreach($server_ids as $sid) {
-				
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
-				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				
-				if($row) {
-					
-					$servers[] = array(
-						'host'    => $row['hostname'],
-						'browser' => $row['browser']
-					);
-				}
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$server_ids[0]);
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			if ($row){
+				$servers[] = array(
+					'host'    => $row['hostname'],
+					'browser' => $row['browser']
+				);
 			}
 		}
-		
+
 		if (count($servers) == 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
 		}
 		
 		$baseURL = $this->instance->getUrl(); 
-		
-		print_r($servers);
-		echo $baseURL;
 		
 		$results  = array();
 		foreach ($servers as $server){
