@@ -87,7 +87,7 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 		$baseURL = $this->instance->getUrl(); 
 		
 		print_r($servers);
-		print_r($baseURL);
+		echo $baseURL;
 		
 		$results  = array();
 		foreach ($servers as $server){
