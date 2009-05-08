@@ -64,18 +64,23 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 			
 		} else {
 			$server_ids = explode(',',$server);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$server_ids[0]);
 			
-			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			foreach($server_ids as $sid) {
+				
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			
+			if($row) {
 				
 				$servers[] = array(
 					'host'    => $row['hostname'],
 					'browser' => $row['browser']
 				);
 			}
+			
 		}
 		
-		t3lib_div::debug($servers);
+		print_r($servers);
 
 		if (count($servers) == 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
