@@ -74,6 +74,8 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 				);
 			}
 		}
+		
+		t3lib_div::debug($servers);
 
 		if (count($servers) == 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
