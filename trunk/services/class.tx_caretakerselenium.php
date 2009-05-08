@@ -50,6 +50,8 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 
 		$server       = $this->getConfigValue('selenium_server');
 		
+		print_r($server);
+		
 		$servers = array();
 		
 		if (is_array($server)){
