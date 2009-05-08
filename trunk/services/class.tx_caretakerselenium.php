@@ -66,7 +66,7 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 			$server_ids = explode(',',$server);
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$server_ids[0]);
 			
-			while($row = $GLOBALS['TYPO_DB']->sql_fetch_assoc($res)) {
+			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				
 				$servers[] = array(
 					'host'    => $row['hostname'],
