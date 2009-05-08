@@ -60,6 +60,8 @@ class tx_caretakerselenium_SeleniumTest {
 		
 		if($this->commandsLoaded) {
 			foreach($this->commands as $command) {
+				
+				if($command->getCommand() == 'waitForLocation')
 			
 				$message = $this->sel->executeCommand($command);
 				if($message != 'OK') {

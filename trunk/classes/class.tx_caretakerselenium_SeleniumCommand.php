@@ -34,6 +34,11 @@ class tx_caretakerselenium_SeleniumCommand {
 	
 		$this->comment .= ' '.$comment;
 	}
+	
+	function getCommand() {
+		
+		return $this->command;
+	}
 }
 
 ?>
