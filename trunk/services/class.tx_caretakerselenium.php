@@ -80,13 +80,13 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 			}
 		}
 		
-		print_r($servers);
-
 		if (count($servers) == 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
 		}
 		
 		$baseURL = $this->instance->getUrl(); 
+		
+		print_r($servers);
 		
 		$results  = array();
 		foreach ($servers as $server){
