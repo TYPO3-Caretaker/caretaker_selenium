@@ -135,7 +135,7 @@ class tx_caretakerselenium_Selenium
         }
 
         if (!$handle = fopen($url, 'r')) {
-            throw new tx_caretakerselenium_SeleniumException('Cannot connected to Selenium RC Server');
+            //throw new tx_caretakerselenium_SeleniumException('Cannot connected to Selenium RC Server');
         }
 
         stream_set_blocking($handle, false);

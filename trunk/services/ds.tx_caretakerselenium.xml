@@ -33,17 +33,6 @@
 						</TCEforms>
 					</selenium_configuration>
 					
-					<response_time_error>
-						<TCEforms>
-							<label>Maximal allowed Response Time in Seconds</label>
-							<config>
-								<type>input</type>
-								<eval>int</eval>
-								<size>10</size>
-							</config>
-						</TCEforms>
-					</response_time_error>
-					
 					<response_time_warning>
 						<TCEforms>
 							<label>Warning Response Time in Seconds</label>
@@ -55,6 +44,17 @@
 						</TCEforms>
 					</response_time_warning>
 
+					<response_time_error>
+						<TCEforms>
+							<label>Maximal allowed Response Time in Seconds</label>
+							<config>
+								<type>input</type>
+								<eval>int</eval>
+								<size>10</size>
+							</config>
+						</TCEforms>
+					</response_time_error>
+					
 					<selenium_server>
 						<TCEforms>
 							<label>Select Selenium Server</label>
