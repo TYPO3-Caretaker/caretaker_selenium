@@ -59,7 +59,12 @@ class tx_caretakerselenium_SeleniumTest {
 	function testMyTestCase() {
 		
 		if($this->commandsLoaded) {
+			
+			echo $this->browser;
+			
 			foreach($this->commands as $command) {
+				
+				t3lib_div::debug($command);
 				
 				// ie waits for page to load if waitForLocation is called
 				// so it must be excluded while walking through the commands
