@@ -68,6 +68,7 @@ class tx_caretakerselenium_SeleniumTest {
 				echo 'Browser is IE and command is waitForLocation?';
 				var_dump(($this->browser == '*iexplore' && $command->getCommand() == 'waitForLocation'));
 				echo 'Browser is IE and command is waitForPageToLoad?';
+				echo 'Current command: '.$command->getCommand();
 				var_dump(($this->browser == '*iexplore' && $command->getCommand() == 'waitPageToLoad'));
 				
 				// if browser is ie and command is waitForLocation set the avoid variable to true
