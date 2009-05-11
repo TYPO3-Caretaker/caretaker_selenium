@@ -87,6 +87,7 @@ class tx_caretakerselenium_SeleniumTest {
 				if($this->browser == '*iexplore' && $command->command == 'waitForLocation') {
 					
 					$avoidWaitForPageToLoad = true;
+					echo 'avoidWaitForPageToLoad set to true'."\n";
 				}
 			
 				$message = $this->sel->executeCommand($command);
