@@ -65,12 +65,6 @@ class tx_caretakerselenium_SeleniumTest {
 				// ie waits for page to load if waitForLocation is called
 				// so it must be excluded while walking through the commands
 				
-				echo 'Browser is IE and command is waitForLocation?';
-				var_dump(($this->browser == '*iexplore' && $command->getCommand() == 'waitForLocation'));
-				echo 'Browser is IE and command is waitForPageToLoad?';
-				echo 'Current command: '.$command->getCommand();
-				var_dump(($this->browser == '*iexplore' && $command->getCommand() == 'waitPageToLoad'));
-				
 				// if browser is ie and command is waitForLocation set the avoid variable to true
 				if($this->browser == '*iexplore' && $command->getCommand() == 'waitForLocation') {
 					
@@ -79,6 +73,10 @@ class tx_caretakerselenium_SeleniumTest {
 				
 				// if the browser is ie and waitForPageToLoad is called and the command before was waitForLocation so $avoidPageToLoad is true
 				// continue with the next command
+				echo 'Browser is ie? '; var_dump($this->browser == '*iexplore');
+				echo 'Current command: '; var_dump($command);
+				echo 'Avoid waitForPageToLoad: '; var_dump($avoidPageToLoad);
+				
 				if($this->browser == '*iexplore' && $command->getCommand() == 'waitForPageToLoad' && $avoidPageToLoad) {
 					
 					$avoidPageToLoad = false;
