@@ -73,7 +73,7 @@ class tx_caretakerselenium_SeleniumTest {
 				echo 'Current command: '; var_dump($command);
 				echo 'Avoid waitForPageToLoad: '; var_dump($avoidWaitForPageToLoad);
 				
-				if($this->browser == '*iexplore' && $command->getCommand() == 'waitForPageToLoad' && $avoidPageToLoad) {
+				if($this->browser == '*iexplore' && $command->command == 'waitForPageToLoad' && $avoidWaitForPageToLoad) {
 					
 					$avoidWaitForPageToLoad = false;
 					continue;
@@ -84,7 +84,7 @@ class tx_caretakerselenium_SeleniumTest {
 				}
 				
 				// if browser is ie and command is waitForLocation set the avoid variable to true
-				if($this->browser == '*iexplore' && $command->getCommand() == 'waitForLocation') {
+				if($this->browser == '*iexplore' && $command->command == 'waitForLocation') {
 					
 					$avoidWaitForPageToLoad = true;
 				}
