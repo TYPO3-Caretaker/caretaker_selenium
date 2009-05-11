@@ -61,7 +61,26 @@ class tx_caretakerselenium_SeleniumTest {
 		if($this->commandsLoaded) {
 			foreach($this->commands as $command) {
 				
-				if($command->getCommand() == 'waitForLocation')
+				// ie waits for page to load if waitForLocation is called
+				// so it must be excluded while walking through the commands
+				
+				// if browser is ie and command is waitForLocation set the avoid variable to true
+				if($this->browser == '*iexplore' && $command->getCommand() == 'waitForLocation') {
+					
+					$avoidPageToLoad = true;
+				}
+				
+				// if the browser is ie and waitForPageToLoad is called and the command before was waitForLocation so $avoidPageToLoad is true
+				// continue with the next command
+				if($this->browser == '*iexplore' && $command->getCommand() == 'waitForPageToLoad' && $avoidPageToLoad) {
+					
+					$avoidPageToLoad = false;
+					continue;
+					
+				} else {
+					
+					$avoidPageToLoad = false;
+				}
 			
 				$message = $this->sel->executeCommand($command);
 				if($message != 'OK') {
