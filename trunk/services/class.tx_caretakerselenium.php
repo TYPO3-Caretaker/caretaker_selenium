@@ -86,10 +86,14 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 			list($success, $msg) = $test->run();
 			$stoptime = microtime(true);
 			$time = $stoptime - $starttime;
-			$results[]  = array( 
-				'success'  => $success,
-				'message'  => $server['host'].':'.$server['browser'].' '.$msg.' ('.$time.' Seconds)',
-				'time'     => $time
+			$results[]  = array(
+				'success'	=> $success,
+				'host'		=> $server['host'],
+				'browser' 	=> $server['browser'],
+				'message'  => $msg,
+				'time'     => $time,
+				'warning_time' => $warning_time,
+				'error_time' => $error_time
 			);
 		}
 		
@@ -118,6 +122,16 @@ class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
 			if ($result['success'] == false ) $sucess = false;
 			if ($result['time']     > $time ) $time   = $result['time'];
 			$message .= $result['message'].chr(10);
+			$message .= 'The test took '.$result['time'].'seconds. ';
+			
+			if($result['time'] > $result['warning_time']) {
+				
+				$message .= 'More than '.$result['warning_time'].' seconds causes a warning.';
+				
+			} elseif($result['time'] > $result['error_time']) {
+				
+				$message .= 'More than '.$result['error_time'].' seconds causes an error.';
+			}
 		}
 		return array($sucess,$time, $message );
 				
