@@ -36,7 +36,7 @@
 require_once (t3lib_extMgm::extPath('caretaker').'/services/class.tx_caretaker_TestServiceBase.php');
 require_once (t3lib_extMgm::extPath('caretaker_selenium').'classes/class.tx_caretakerselenium_SeleniumTest.php');
 
-class tx_caretakerselenium extends tx_caretaker_TestServiceBase {
+class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	function __construct(){
 		$this->valueDescription = "Seconds";
