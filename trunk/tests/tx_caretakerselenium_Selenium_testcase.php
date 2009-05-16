@@ -1,7 +1,7 @@
 <?php 
 
-require_once (t3lib_extMgm::extPath('caretaker').'classes/nodes/class.tx_caretaker_Test.php');
-require_once (t3lib_extMgm::extPath('caretaker').'classes/nodes/class.tx_caretaker_Instance.php');
+require_once (t3lib_extMgm::extPath('caretaker').'classes/nodes/class.tx_caretaker_TestNode.php');
+require_once (t3lib_extMgm::extPath('caretaker').'classes/nodes/class.tx_caretaker_InstanceNode.php');
 require_once (t3lib_extMgm::extPath('caretaker_selenium').'classes/class.tx_caretakerselenium_SeleniumTest.php');
 
 class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
@@ -40,8 +40,8 @@ class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
 	
 	function test_selenium_testservice(){
 		
-		$instance = new tx_caretaker_Instance(9990, 'title', false, $this->baseURL, '');
-		$test = new tx_caretaker_Test(9990, 'title', $instance ,'tx_caretakerselenium', 
+		$instance = new tx_caretaker_InstanceNode(9990, 'title', false, $this->baseURL, '');
+		$test = new tx_caretaker_TestNode(9990, 'title', $instance ,'tx_caretakerselenium', 
 			array(
 				'selenium_configuration' => 'open:
 										-'.$test_query.'
