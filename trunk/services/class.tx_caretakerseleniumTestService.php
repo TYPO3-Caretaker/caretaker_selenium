@@ -122,6 +122,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			if ($result['success'] == false ) $sucess = false;
 			if ($result['time']     > $time ) $time   = $result['time'];
 			$message .= $result['message'].chr(10);
+			$message .= $result['browser'];
 			$message .= 'The test took '.$result['time'].'seconds. ';
 			
 			if($result['time'] > $result['warning_time']) {
