@@ -71,13 +71,10 @@ class tx_caretakerselenium_SeleniumTest {
 				// continue with the next command
 				if($this->browser == '*iexplore' && $command->command == 'waitForPageToLoad' && $avoidWaitForPageToLoad) {
 					
-					$avoidWaitForPageToLoad = false;
 					continue;
 					
-				} else {
-					
-					$avoidWaitForPageToLoad = false;
 				}
+				$avoidWaitForPageToLoad = false;
 				
 				// if browser is ie and command is waitForLocation set the avoid variable to true
 				if($this->browser == '*iexplore' && $command->command == 'waitForLocation') {
