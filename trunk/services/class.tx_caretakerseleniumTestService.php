@@ -127,7 +127,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			if ($result['success'] == false ) {
 				
 				$sucess = false;
-				$message .= 'Test failed under '.$result['browser'].'!';
+				$message .= 'Test failed under '.$result['browser'].' with message: '.$result['message'].'!';
 				
 			} else {
 				
