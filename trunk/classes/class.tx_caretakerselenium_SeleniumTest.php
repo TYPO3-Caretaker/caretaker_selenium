@@ -4,8 +4,14 @@ require_once 'class.tx_caretakerselenium_Selenium.php';
 require_once 'class.tx_caretakerselenium_SeleniumCommand.php';
 
 /**
-NaworkSeleniumTest is the test suite that extends the PHPUnit testcase
-and uses the selenium tests.
+tx_caretakerselenium_SeleniumTest manages the commands and executes them through a tx_caretakerseleneium_Selenium
+
+Added IE Fix: In Internet Explorer waitForLocation includes waitForPageToLoad, so this must be caught to avoid a
+timeout.
+
+Added custom timer: You can start the test timer by adding '@startTimer:' into your selenese commands. Every call
+resets the start time. You can stop the timer by adding '@stopTimer:' into your selenese commands. Only the first
+call is interpreted. So take care you place your timer commands.
 */
 
 class tx_caretakerselenium_SeleniumTest {
@@ -62,15 +68,40 @@ class tx_caretakerselenium_SeleniumTest {
 			
 			$avoidWaitForPageToLoad = false;
 			
+			// start the timer just before the first commands are send
+			$starttime = microtime(true);
+			
 			foreach($this->commands as $command) {
+				
+				// @ indicates a custom command
+				if(substr($command->command, 0, 1) == '@') {
+				
+					// reset the start timer, because the time shoold start now
+					if($command->command == '@startTimer') {
+						
+						$starttime = microtime(true);
+					}
+					
+					// set the end time, because the time important commands are executed
+					if($command->command == '@stopTimer') {
+						
+						if(empty($endtime)) {
+							
+							$endtime = microtime(true);
+						}
+					}
+					
+					// continue with the next command
+					continue;
+				}
 				
 				// ie waits for page to load if waitForLocation is called
 				// so it must be excluded while walking through the commands
 				
 				// if the browser is ie and waitForPageToLoad is called and the command before was waitForLocation so $avoidPageToLoad is true
-				// continue with the next command
 				if($this->browser == '*iexplore' && $command->command == 'waitForPageToLoad' && $avoidWaitForPageToLoad) {
 					
+					// continue with the next command
 					continue;
 					
 				}
@@ -87,11 +118,24 @@ class tx_caretakerselenium_SeleniumTest {
 			
 					$this->sel->stop();
 					$this->testSuccessful = false;
-					return array(false,'An error occured: Command:'.$command->command.' at line '.$command->lineInFile.' in your commands file. Message: '.$message.' Comment: '.$command->comment."\n");
+					$msg = 'An error occured: Command:'.$command->command.' at line '.$command->lineInFile.' in your commands. Message: '.$message;
+					if(!empty($command->comment)) {
+						
+						$msg .= ' Comment: '.$command->comment."\n";
+					}
+					return array(false,$msg,0);
 				}
 			}
+			
+			// if $endtime is not already set, do this now
+			if(empty($endtime)) {
+				
+				$endtime = microtime(true);
+			}
+			
+			$time = $endtime - $starttime;
 			if($this->testSuccessful) {
-				return array(true, 'Test has passed successfully!'."\n");
+				return array(true, '', $time);
 			}
 		}
 		return array(false);

@@ -38,8 +38,11 @@ require_once (t3lib_extMgm::extPath('caretaker_selenium').'classes/class.tx_care
 
 class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
-	function __construct(){
-		$this->valueDescription = "Seconds";
+	protected $valueDescription = 'Seconds';
+	
+	public function getValueDescription(){
+		
+		return $this->valueDescription;
 	}
 	
 	public function runTest(){
@@ -81,11 +84,11 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		
 		$results  = array();
 		foreach ($servers as $server){
-			$starttime = microtime(true);
+			//$starttime = microtime(true);
 			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
-			list($success, $msg) = $test->run();
-			$stoptime = microtime(true);
-			$time = $stoptime - $starttime;
+			list($success, $msg, $time) = $test->run();
+			//$stoptime = microtime(true);
+			//$time2 = $stoptime - $starttime;
 			$results[]  = array(
 				'success'	=> $success,
 				'host'		=> $server['host'],
@@ -116,23 +119,35 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	function getAggregatedResults ($results){
 		$sucess      = true;
-		$time  = 0;
 		$message    = '';
 		foreach ($results as $result){
-			if ($result['success'] == false ) $sucess = false;
+			$time  = 0;
 			if ($result['time']     > $time ) $time   = $result['time'];
-			$message .= $result['message'].chr(10);
-			$message .= $result['browser'];
-			$message .= 'The test took '.$result['time'].'seconds. ';
 			
-			if($result['time'] > $result['warning_time']) {
+			if ($result['success'] == false ) {
 				
-				$message .= 'More than '.$result['warning_time'].' seconds causes a warning.';
+				$sucess = false;
+				$message .= 'Test failed under '.$result['browser'].'!';
 				
-			} elseif($result['time'] > $result['error_time']) {
+			} else {
 				
-				$message .= 'More than '.$result['error_time'].' seconds causes an error.';
+				$message .= 'Test has passed successfully under '.$result['browser'].'!';
+				$message .= ' The test took '.round($time,1).' seconds.';
 			}
+			
+			//$message .= $result['message'].chr(10);
+			//$message .= $result['browser'].':';
+			//$message .= ' The test took '.round($time,1).' seconds.';
+			
+			if($result['time'] > $result['error_time']) {
+				
+				$message .= ' More than '.$result['error_time'].' seconds causes an error.';
+				
+			} elseif($result['time'] > $result['warning_time']) {
+				
+				$message .= ' More than '.$result['warning_time'].' seconds causes a warning.';
+			}
+			$message .= '';
 		}
 		return array($sucess,$time, $message );
 				
