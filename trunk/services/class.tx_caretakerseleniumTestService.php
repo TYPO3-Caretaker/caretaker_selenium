@@ -103,9 +103,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		list($success, $time, $message) = $this->getAggregatedResults($results);
 		
 		if ($success){
-			if ($time > $error_time )  {
+			if ($time >= $error_time )  {
 				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $time, $message);
-			} else if ($time > $warning_time) {
+			} else if ($time >= $warning_time) {
 				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $time, $message);
 			} else {
 				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_OK, $time, $message);
