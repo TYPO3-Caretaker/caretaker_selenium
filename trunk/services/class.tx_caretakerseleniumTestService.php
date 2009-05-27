@@ -120,8 +120,8 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	function getAggregatedResults ($results){
 		$sucess      = true;
 		$message    = '';
+		$time  = 0;
 		foreach ($results as $result){
-			$time  = 0;
 			if ($result['time']     > $time ) $time   = $result['time'];
 			
 			if ($result['success'] == false ) {
@@ -132,7 +132,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			} else {
 				
 				$message .= 'Test has passed successfully under '.$result['browser'].'!';
-				$message .= ' The test took '.round($time,1).' seconds.';
+				$message .= ' The test took '.round($result['time'],1).' seconds.';
 			}
 			
 			//$message .= $result['message'].chr(10);
