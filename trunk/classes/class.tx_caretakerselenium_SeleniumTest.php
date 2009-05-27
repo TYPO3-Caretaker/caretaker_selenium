@@ -98,8 +98,13 @@ class tx_caretakerselenium_SeleniumTest {
 				// ie waits for page to load if waitForLocation is called
 				// so it must be excluded while walking through the commands
 				
+				// !!! UPDATE !!!
+				// internet explorer seems to work exactly as firefox now, so it is commented out so it can
+				// quickly be reactivated if the next official release of the selenium server behaves different again
+				
 				// if the browser is ie and waitForPageToLoad is called and the command before was waitForLocation so $avoidPageToLoad is true
-				if($this->browser == '*iexplore' && $command->command == 'waitForPageToLoad' && $avoidWaitForPageToLoad) {
+				
+				/*if($this->browser == '*iexplore' && $command->command == 'waitForPageToLoad' && $avoidWaitForPageToLoad) {
 					
 					// continue with the next command
 					continue;
@@ -110,8 +115,10 @@ class tx_caretakerselenium_SeleniumTest {
 				// if browser is ie and command is waitForLocation set the avoid variable to true
 				if($this->browser == '*iexplore' && $command->command == 'waitForLocation') {
 					
-					$avoidWaitForPageToLoad = true;
+					
+					//$avoidWaitForPageToLoad = true;
 				}
+				*/
 			
 				$message = $this->sel->executeCommand($command);
 				if($message != 'OK') {
