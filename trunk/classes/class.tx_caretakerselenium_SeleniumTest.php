@@ -62,14 +62,33 @@ class tx_caretakerselenium_SeleniumTest {
 		}
 	}*/
 
+	
+	/**
+	 * added advanced timer functionality
+	 * 
+	 * '@startTimer' starts a timer
+	 * '@stopTimer' stop the timer
+	 * 
+	 * you can call this several times and the time between '@startTimer' and '@stopTimer' is measured
+	 * and added to the total time
+	 * 
+	 * there is now automatic timer anymore, must be configured in the commands
+	 * if no timer commands are used the time is 0, should be everytime green
+	 * 
+	 */
 	function testMyTestCase() {
 		
 		if($this->commandsLoaded) {
 			
-			$avoidWaitForPageToLoad = false;
+			// $avoidWaitForPageToLoad = false; // needed for ie fix, UPDATE: not needed at the moment
+			$time = 0; // the measured time
+			$timerRunning = false; // indicates if the timer is running
+			
+			// no automatic timer anymore
 			
 			// start the timer just before the first commands are send
-			$starttime = microtime(true);
+			//$starttime = microtime(true);
+			//$timerRunning = true;
 			
 			foreach($this->commands as $command) {
 				
@@ -77,17 +96,24 @@ class tx_caretakerselenium_SeleniumTest {
 				if(substr($command->command, 0, 1) == '@') {
 				
 					// reset the start timer, because the time shoold start now
+					// if called when the timer is not running starts to count the time
 					if($command->command == '@startTimer') {
 						
-						$starttime = microtime(true);
+						if(!$timerRunning) {
+							
+							$starttime = microtime(true);
+							$timerRunning = true;
+						}
 					}
 					
 					// set the end time, because the time important commands are executed
+					// every time this is called it adds the time between now and $starttime to the measured $time
 					if($command->command == '@stopTimer') {
 						
-						if(empty($endtime)) {
+						if($timerRunning) {
 							
-							$endtime = microtime(true);
+							$time += microtime(true) - $starttime;
+							$timerRunning = false;
 						}
 					}
 					
@@ -134,13 +160,12 @@ class tx_caretakerselenium_SeleniumTest {
 				}
 			}
 			
-			// if $endtime is not already set, do this now
-			if(empty($endtime)) {
+			// if timer is running, now stop it
+			if($timerRunning) {
 				
-				$endtime = microtime(true);
+				$time += microtime(true) - $starttime;
 			}
 			
-			$time = $endtime - $starttime;
 			if($this->testSuccessful) {
 				return array(true, '', $time);
 			}
