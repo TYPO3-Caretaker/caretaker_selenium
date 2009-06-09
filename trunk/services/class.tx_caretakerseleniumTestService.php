@@ -45,6 +45,48 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		return $this->valueDescription;
 	}
 	
+	/**
+	 * Checks if all selenium servers that are needed for this test are free
+	 * and returns the result. If only one server is busy the test must not be run
+	 * to avoid parallel execution of seleniumtests on one machine.
+	 * 
+	 * @return boolean
+	 */
+	public function isExecutable() {
+		
+		$server = $this->getConfigValue('selenium_server');
+		
+		$servers = array();
+		
+		if (is_array($server)){
+			$inUseSince = $server['inUseSince'];
+			
+			if($inUseSince + 3600 > time()) {
+				
+				return false; // server is busy and can NOT be used
+			}
+			
+			return ture; // server is free and can be used
+			
+		} else {
+			
+			$server_ids = explode(',',$server);
+			
+			foreach($server_ids as $sid) {
+				
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				
+				if ($row['inUseSince'] + 3600 > time()){
+					
+					return false; // server is in use and can NOT be used
+				}
+			}
+			
+			return true; // server are free and can be used
+		}
+	}
+	
 	public function runTest(){
 				
 		$commands     = $this->getConfigValue('selenium_configuration');
