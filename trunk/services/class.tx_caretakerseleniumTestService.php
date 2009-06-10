@@ -99,6 +99,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		
 		if (is_array($server)){
 			$servers[] = array(
+				'uid' => $server['uid'],
 				'host'    => $server['host'],
 				'browser' => $server['browser']
 			);
@@ -111,6 +112,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				if ($row){
 					$servers[] = array(
+						'uid' => $sid,
 						'host'    => $row['hostname'],
 						'browser' => $row['browser']
 					);
@@ -121,6 +123,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		if (count($servers) == 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
 		}
+		
+		// set the servers busy
+		$this->setServersBusy($servers);
 		
 		$baseURL = $this->instance->getUrl(); 
 		
@@ -141,6 +146,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				'error_time' => $error_time
 			);
 		}
+		
+		// set the servers free
+		$this->setServersBusy($servers, false);
 		
 		list($success, $time, $message) = $this->getAggregatedResults($results);
 		
@@ -193,6 +201,33 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		}
 		return array($sucess,$time, $message );
 				
+	}
+	
+	private function setServersBusy($servers, $state = true) {
+		
+		$serverIds = array();
+		
+		foreach($servers as $server) {
+			
+			$serverIds[] = $server['uid'];
+		}
+		
+		foreach($serverIds as $sid) {
+			
+			if($state) {
+				
+				// set the selenium servers needed for that test to busy state
+				// for that set the inUseSince timestamp to the current time
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time()));
+				
+			} else {
+				
+				// set the selenium servers needed for that test to free state
+				// for that set the inUseSince timestamp to the current time minus one hour and one second
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time() - 3601));
+			}
+			
+		}
 	}
 }
 
