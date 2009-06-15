@@ -89,9 +89,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	public function runTest(){
 				
-		$commands     = $this->getConfigValue('selenium_configuration');
+		$commands     = $this->getConfigValue('selenium_configuration');#
 		
-		//echo $commands;
+		print_r($commands);
 		
 		$error_time   = $this->getConfigValue('response_time_error');
 		$warning_time = $this->getConfigValue('response_time_warning');
