@@ -89,6 +89,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	public function runTest(){
 		
+		echo 'This is the retreived configuration:'."\n";
 		print_r($this->flexform_configuration);
 				
 		$commands     = $this->getConfigValue('selenium_configuration');
