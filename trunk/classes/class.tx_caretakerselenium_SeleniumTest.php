@@ -24,6 +24,9 @@ class tx_caretakerselenium_SeleniumTest {
 	private $host;
 	
 	function __construct($commands,$browser,$baseUrl,$host) {
+		
+		//echo $commands;
+		
 		$this->commandsText = $commands;
 		$this->browser = $browser;
 		$this->baseURL = $baseUrl;
