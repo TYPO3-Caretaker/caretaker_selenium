@@ -92,10 +92,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		$commands     = $this->getConfigValue('selenium_configuration');
 		$error_time   = $this->getConfigValue('response_time_error');
 		$warning_time = $this->getConfigValue('response_time_warning');
-		ob_start();
-		echo $commands;
-		ob_end_flush();
-
+		
 		$server       = $this->getConfigValue('selenium_server');
 		
 		$servers = array();
