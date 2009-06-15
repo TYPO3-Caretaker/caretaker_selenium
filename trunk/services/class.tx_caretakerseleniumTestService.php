@@ -83,15 +83,17 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				}
 			}
 			
-			return true; // server are free and can be used
+			return true; // servers are free and can be used
 		}
 	}
 	
 	public function runTest(){
-				
-		$commands     = $this->getConfigValue('selenium_configuration');#
 		
-		print_r($commands);
+		print_r($this->flexform_configuration);
+				
+		$commands     = $this->getConfigValue('selenium_configuration');
+		
+		//print_r($commands);
 		
 		$error_time   = $this->getConfigValue('response_time_error');
 		$warning_time = $this->getConfigValue('response_time_warning');
