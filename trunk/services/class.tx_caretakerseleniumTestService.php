@@ -63,11 +63,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			
 			if($inUseSince + 3600 > time()) {
 				
-				echo "Servers are busy.\n";
 				return false; // server is busy and can NOT be used
 			}
 			
-			echo "Servers are free.\n";
 			return ture; // server is free and can be used
 			
 		} else {
@@ -81,12 +79,10 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				
 				if ($row['inUseSince'] + 3600 > time()){
 					
-					echo "Servers are busy.\n";
 					return false; // server is in use and can NOT be used
 				}
 			}
 			
-			echo "Servers are free.\n";
 			return true; // servers are free and can be used
 		}
 	}
@@ -226,14 +222,12 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			
 			if($state) {
 				
-				echo "Servers are set to busy.\n";
 				// set the selenium servers needed for that test to busy state
 				// for that set the inUseSince timestamp to the current time
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time()));
 				
 			} else {
 				
-				echo "Servers are set to free.\n";
 				// set the selenium servers needed for that test to free state
 				// for that set the inUseSince timestamp to the current time minus one hour and one second
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time() - 3601));
