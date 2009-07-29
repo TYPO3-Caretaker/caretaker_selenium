@@ -38,7 +38,7 @@ require_once (t3lib_extMgm::extPath('caretaker_selenium').'classes/class.tx_care
 
 class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
-	protected $valueDescription = 'Seconds';
+	protected $valueDescription = 'LLL:EXT:caretaker_selenium/locallang.xml:seconds';
 	
 	public function getValueDescription(){
 		
@@ -66,7 +66,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				return false; // server is busy and can NOT be used
 			}
 			
-			return ture; // server is free and can be used
+			return true; // server is free and can be used
 			
 		} else {
 			
@@ -106,6 +106,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		if (is_array($server)){
 			$servers[] = array(
 				'uid' => $server['uid'],
+				'title' => $server['title'],
 				'host'    => $server['host'],
 				'browser' => $server['browser']
 			);
@@ -119,6 +120,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				if ($row){
 					$servers[] = array(
 						'uid' => $sid,
+						'title' => $row['title'],
 						'host'    => $row['hostname'],
 						'browser' => $row['browser']
 					);
@@ -145,6 +147,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			$results[]  = array(
 				'success'	=> $success,
 				'host'		=> $server['host'],
+				'title' => $server['title'],
 				'browser' 	=> $server['browser'],
 				'message'  => $msg,
 				'time'     => $time,
@@ -174,38 +177,43 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	}
 	
 	function getAggregatedResults ($results){
-		$sucess      = true;
-		$message    = '';
+		$success      = true;
+		$message = array();
 		$time  = 0;
 		foreach ($results as $result){
 			if ($result['time']     > $time ) $time   = $result['time'];
 			
 			if ($result['success'] == false ) {
 				
-				$sucess = false;
-				$message .= 'Test failed under '.$result['browser'].' with message: '.$result['message'].'!';
+				$success = false;
+				$message[][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testFailed';
 				
 			} else {
 				
-				$message .= 'Test has passed successfully under '.$result['browser'].'!';
-				$message .= ' The test took '.round($result['time'],1).' seconds.';
+				$message[][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testPassed';
 			}
 			
-			//$message .= $result['message'].chr(10);
-			//$message .= $result['browser'].':';
-			//$message .= ' The test took '.round($time,1).' seconds.';
+			$message[count($message) - 1][1] = $result['success'];
+			$message[count($message) - 1][2] = $result['title'];
+			$message[count($message) - 1][3] = $result['message'];
+			$message[count($message) - 1][4] = $result['time'];
+			$message[count($message) - 1][5] = $this->valueDescription;
 			
 			if($result['time'] > $result['error_time']) {
 				
-				$message .= ' More than '.$result['error_time'].' seconds causes an error.';
+				$message[count($message) - 1][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testFailedTime';
+				$message[count($message) - 1][6] = $result['error_time'];
+				$message[count($mesdage) - 1][7] = $this->getValueDescription();
+				
 				
 			} elseif($result['time'] > $result['warning_time']) {
 				
-				$message .= ' More than '.$result['warning_time'].' seconds causes a warning.';
+				$message[count($message) - 1][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testWarningTime';
+				$message[count($message) - 1][6] = $result['warning_time'];
+				$message[count($mesdage) - 1][7] = $this->getValueDescription();
 			}
-			$message .= '';
 		}
-		return array($sucess,$time, $message );
+		return array($success,$time, serialize($message));
 				
 	}
 	
