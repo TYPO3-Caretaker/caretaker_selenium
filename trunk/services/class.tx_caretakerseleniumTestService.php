@@ -193,16 +193,16 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			'details' => $details
 		);
 
-			// calculate res
-		if ( $num_errors > 0 )  {
+			// calculate results
+		if ( $num_error > 0 )  {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR,   round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
-		} else if ( $num_warnings > 0 ) {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
-		} else {
-			return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK ,    round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok'       , $info_array );
 		}
 
-		return $testResult;
+		if ( $num_warnings > 0 ) {
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
+		}
+
+		return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK ,    round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok'       , $info_array );
 		
 	}
 	
