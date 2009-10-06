@@ -25,23 +25,20 @@
 			<label index="selenium_info_ok">Test passed on all ###VALUE_NUM_SERVERS### clients</label>
 			<label index="selenium_info_problems">Test passed on ###VALUE_NUM_OK### clients. ###VALUE_NUM_ERROR### Errors, ###VALUE_NUM_WARNINGS### Warnings.</label>
 			
-			<label index="selenium_detail_ok">Test passed on ###VALUE_SERVER###:###VALUE_BROWSER### in ###VALUE_TIME### Milliseconds</label>
-			<label index="selenium_detail_error">Test failed on ###VALUE_SERVER###:###VALUE_BROWSER### in ###VALUE_TIME### Milliseconds</label>
-			<label index="selenium_detail_timeout">Test passed on ###VALUE_SERVER###:###VALUE_BROWSER### but took ###VALUE_TIME### Milliseconds</label>
-			
-			
-			<label index="testFailed">Test failed under ###BROWSER### with message '###MESSAGE###'. </label>
-			<label index="testFailedTime">Test failed under ###BROWSER### because of the timeout of ###TIME_LIMIT### ###TIME_UNIT###. </label>
-			<label index="testWarningTime">Test passed with a warning under ###BROWSER### because of the timeout of ###TIME_LIMIT### ###TIME_UNIT###. It took ###TIME### ###TIME_UNIT###. </label>
-			<label index="testPassed">Test passed successfully under ###BROWSER###. It took ###TIME### ###TIME_UNIT###. </label>
-			<label index="seconds">seconds</label>
+			<label index="selenium_detail_ok">Test passed on ###VALUE_TITLE### in ###VALUE_TIME### seconds</label>
+			<label index="selenium_detail_error">Test failed on ###VALUE_TITLE### in ###VALUE_TIME### seconds</label>
+			<label index="selenium_detail_timeout">Test passed on ###VALUE_TITLE### but took ###VALUE_TIME### seconds</label>
 		</languageKey>
+
 		<languageKey index="de" type="array">
-			<label index="testFailed">Test schlug unter ###BROWSER### mit der Meldung '###MESSAGE###' fehl. </label>
-			<label index="testFailedTime">Test schlug unter ###BROWSER### aufgrund einer Zeitüberschreitung der ###TIME_LIMIT### ###TIME_UNIT### fehl. </label>
-			<label index="testWarningTime">Test verlief unter ###BROWSER### mit einer Warnung aufgrund einer Zeitüberschreitung der ###TIME_LIMIT### ###TIME_UNIT###. Der Test dauerte ###TIME### ###TIME_UNIT###. </label>
-			<label index="testPassed">Test verlief erfolgreich unter ###BROWSER###. Dauer: ###TIME### ###TIME_UNIT###. </label>
-			<label index="seconds">Sekunden</label>
+			<label index="selenium_configuration_error">Der Selenium-Server ist nicht korrekt konfiguriert</label>
+
+			<label index="selenium_info_ok">Der Test verlief auf allen ###VALUE_NUM_SERVERS### Clients erfolgreich.</label>
+			<label index="selenium_info_problems">Der Test funktionierte auf ###VALUE_NUM_OK### Clients. Es gab ###VALUE_NUM_ERROR### Fehler und ###VALUE_NUM_WARNINGS### Warnungen.</label>
+
+			<label index="selenium_detail_ok">Der Test lief korrekt auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden</label>
+			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden</label>
+			<label index="selenium_detail_timeout">Der Test lief korrekt auf ###VALUE_TITLE### aber dauerte ###VALUE_TIME### Sekunden</label>
 		</languageKey>
 	</data>
 </T3locallang>
