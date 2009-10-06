@@ -153,36 +153,34 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
 			list($success, $msg, $time) = $test->run();
 		
-			$detail_info  = array(
-				'values' => array (
-					'success'	=> $success,
-					'host'		=> $server['host'],
-					'title'     => $server['title'],
-					'browser' 	=> $server['browser'],
-					'message'  => $msg,
-					'time'     => $time
-				)
+			$values  = array(
+				'success'	=> $success,
+				'host'		=> $server['host'],
+				'title'     => $server['title'],
+				'browser' 	=> $server['browser'],
+				'message'  => $msg,
+				'time'     => $time
 			);
 
 			$whole_time += $time;
 			
 			if (!$success){
-				$detail_info['selenium_detail_error'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_error';
+				$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_error';
 				$num_error ++;
 			} else {
 				if ($whole_time > $error_time ){
-					$detail_info['selenium_detail_timout_error'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
+					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
 					$num_error ++;
 				} else if  ($whole_time > $warning_time){
-					$detail_info['selenium_detail_timout_warning'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
+					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
 					$num_warning ++;
 				} else {
-					$detail_info['messsage'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_ok';
+					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_ok';
 					$num_ok ++;
 				}
 			}
 
-			$details[] = $detail_info;
+			$details[] = array( 'message'=>$message , 'values'=>$values );
 		}
 		
 			// set the servers free
@@ -197,11 +195,11 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 			// calculate res
 		if ( $num_errors > 0 )  {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems'  , $info_array);
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR,   $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
 		} else if ( $num_warnings > 0 ) {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array);
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
 		} else {
-			return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK , $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok' , $info_array );
+			return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK ,    $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok'       , $info_array );
 		}
 
 		return $testResult;
