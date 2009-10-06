@@ -20,6 +20,16 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="selenium_configuration_error">Selenium server was not properly configured</label>
+			
+			<label index="selenium_info_ok">Test passed on all ###VALUE_NUM_SERVERS### clients</label>
+			<label index="selenium_info_problems">Test passed on ###VALUE_NUM_OK### clients. ###VALUE_NUM_ERROR### Errors, ###VALUE_NUM_WARNINGS### Warnings.</label>
+			
+			<label index="selenium_detail_ok">Test passed on ###VALUE_SERVER###:###VALUE_BROWSER### in ###VALUE_TIME### Milliseconds</label>
+			<label index="selenium_detail_error">Test failed on ###VALUE_SERVER###:###VALUE_BROWSER### in ###VALUE_TIME### Milliseconds</label>
+			<label index="selenium_detail_timeout">Test passed on ###VALUE_SERVER###:###VALUE_BROWSER### but took ###VALUE_TIME### Milliseconds</label>
+			
+			
 			<label index="testFailed">Test failed under ###BROWSER### with message '###MESSAGE###'. </label>
 			<label index="testFailedTime">Test failed under ###BROWSER### because of the timeout of ###TIME_LIMIT### ###TIME_UNIT###. </label>
 			<label index="testWarningTime">Test passed with a warning under ###BROWSER### because of the timeout of ###TIME_LIMIT### ###TIME_UNIT###. It took ###TIME### ###TIME_UNIT###. </label>

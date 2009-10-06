@@ -129,7 +129,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		}
 
 		if (count($servers) == 0 ) {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'Selenium server was not properly configured');
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_configuration_error');
 		}
 		
 		// set the servers busy
@@ -138,83 +138,74 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		$baseURL = $this->instance->getUrl(); 
 		
 		$results  = array();
+		
+		$num_servers = 0;
+		$num_ok      = 0;
+		$num_warning = 0;
+		$num_error   = 0;
+		$whole_time  = 0;
+
+		$details = array();
+		
 		foreach ($servers as $server){
-			//$starttime = microtime(true);
+			$num_servers ++;
+
 			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
 			list($success, $msg, $time) = $test->run();
-			//$stoptime = microtime(true);
-			//$time2 = $stoptime - $starttime;
-			$results[]  = array(
-				'success'	=> $success,
-				'host'		=> $server['host'],
-				'title' => $server['title'],
-				'browser' 	=> $server['browser'],
-				'message'  => $msg,
-				'time'     => $time,
-				'warning_time' => $warning_time,
-				'error_time' => $error_time
+		
+			$detail_info  = array(
+				'values' => array (
+					'success'	=> $success,
+					'host'		=> $server['host'],
+					'title'     => $server['title'],
+					'browser' 	=> $server['browser'],
+					'message'  => $msg,
+					'time'     => $time
+				)
 			);
+
+			$whole_time += $time;
+			
+			if (!$success){
+				$detail_info['selenium_detail_error'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_error';
+				$num_error ++;
+			} else {
+				if ($whole_time > $error_time ){
+					$detail_info['selenium_detail_timout_error'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
+					$num_error ++;
+				} else if  ($whole_time > $warning_time){
+					$detail_info['selenium_detail_timout_warning'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
+					$num_warning ++;
+				} else {
+					$detail_info['messsage'] = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_ok';
+					$num_ok ++;
+				}
+			}
+
+			$details[] = $detail_info;
 		}
 		
-		// set the servers free
+			// set the servers free
 		$this->setServersBusy($servers, false);
-		
-		list($success, $time, $message) = $this->getAggregatedResults($results);
-		
-		if ($success){
-			if ($time >= $error_time )  {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $time, $message);
-			} else if ($time >= $warning_time) {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $time, $message);
-			} else {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_OK, $time, $message);
-			}
-		}else{
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, $message);
+
+
+			// 
+		$info_array = array(
+			'values'  => array( 'num_servers'=>$num_servers, 'num_ok' => $num_ok, 'num_warning'=>$num_warning, 'num_error' =>$num_error, 'time'=>$whole_time ),
+			'details' => $details
+		);
+
+			// calculate res
+		if ( $num_errors > 0 )  {
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems'  , $info_array);
+		} else if ( $num_warnings > 0 ) {
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array);
+		} else {
+			return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK , $whole_time, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok' , $info_array );
 		}
-		
+
 		return $testResult;
-	}
-	
-	function getAggregatedResults ($results){
-		$success      = true;
-		$message = array();
-		$time  = 0;
-		foreach ($results as $result){
-			if ($result['time']     > $time ) $time   = $result['time'];
-			
-			if ($result['success'] == false ) {
-				
-				$success = false;
-				$message[][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testFailed';
-				
-			} else {
-				
-				$message[][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testPassed';
-			}
-			
-			$message[count($message) - 1][1] = $result['success'];
-			$message[count($message) - 1][2] = $result['title'];
-			$message[count($message) - 1][3] = $result['message'];
-			$message[count($message) - 1][4] = $result['time'];
-			$message[count($message) - 1][5] = $this->valueDescription;
-			
-			if($result['time'] > $result['error_time']) {
-				
-				$message[count($message) - 1][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testFailedTime';
-				$message[count($message) - 1][6] = $result['error_time'];
-				$message[count($mesdage) - 1][7] = $this->getValueDescription();
-				
-				
-			} elseif($result['time'] > $result['warning_time']) {
-				
-				$message[count($message) - 1][0] = 'LLL:EXT:caretaker_selenium/locallang.xml:testWarningTime';
-				$message[count($message) - 1][6] = $result['warning_time'];
-				$message[count($mesdage) - 1][7] = $this->getValueDescription();
-			}
-		}
-		return array($success,$time, serialize($message));
-				
+		
 	}
 	
 	private function setServersBusy($servers, $state = true) {
