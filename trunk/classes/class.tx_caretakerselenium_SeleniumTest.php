@@ -85,7 +85,10 @@ class tx_caretakerselenium_SeleniumTest {
 			
 			// $avoidWaitForPageToLoad = false; // needed for ie fix, UPDATE: not needed at the moment
 			$time = 0; // the measured time
-			$timerRunning = false; // indicates if the timer is running
+			$starttime = microtime(true); // time is started automatically
+			$lastRound = $starttime;
+			$timerRunning = true; // indicates if the timer is running
+			$timeLog = array();
 			
 			// no automatic timer anymore
 			
@@ -100,54 +103,38 @@ class tx_caretakerselenium_SeleniumTest {
 				
 					// reset the start timer, because the time shoold start now
 					// if called when the timer is not running starts to count the time
-					if($command->command == '@startTimer') {
-						
-						if(!$timerRunning) {
-							
+					switch($command->command){
+
+						case '@resetTimer':
+
 							$starttime = microtime(true);
 							$timerRunning = true;
-						}
-					}
-					
-					// set the end time, because the time important commands are executed
-					// every time this is called it adds the time between now and $starttime to the measured $time
-					if($command->command == '@stopTimer') {
-						
-						if($timerRunning) {
+							break;
+
+						case '@startTimer':
 							
-							$time += microtime(true) - $starttime;
-							$timerRunning = false;
-						}
+							if(!$timerRunning) {
+
+								$starttime = microtime(true);
+								$timerRunning = true;
+							}
+							break;
+
+						case '@stopTimer': 
+						
+							if($timerRunning) {
+								$timeLog[] = microtime(true) - $lastRound.' '.$command->comment;
+								$lastRound = microtime(true);
+								$time += microtime(true) - $starttime;
+								$timerRunning = false;
+							}
+							break;
+
 					}
 					
 					// continue with the next command
 					continue;
 				}
-				
-				// ie waits for page to load if waitForLocation is called
-				// so it must be excluded while walking through the commands
-				
-				// !!! UPDATE !!!
-				// internet explorer seems to work exactly as firefox now, so it is commented out so it can
-				// quickly be reactivated if the next official release of the selenium server behaves different again
-				
-				// if the browser is ie and waitForPageToLoad is called and the command before was waitForLocation so $avoidPageToLoad is true
-				
-				/*if($this->browser == '*iexplore' && $command->command == 'waitForPageToLoad' && $avoidWaitForPageToLoad) {
-					
-					// continue with the next command
-					continue;
-					
-				}
-				$avoidWaitForPageToLoad = false;
-				
-				// if browser is ie and command is waitForLocation set the avoid variable to true
-				if($this->browser == '*iexplore' && $command->command == 'waitForLocation') {
-					
-					
-					//$avoidWaitForPageToLoad = true;
-				}
-				*/
 			
 				$message = $this->sel->executeCommand($command);
 				if($message != 'OK') {
@@ -159,18 +146,17 @@ class tx_caretakerselenium_SeleniumTest {
 						
 						$msg .= ' Comment: '.$command->comment."\n";
 					}
-					return array(false,$msg,0);
+					return array(false,$msg.' '.implode(':',$timeLog),0);
 				}
 			}
 			
 			// if timer is running, now stop it
 			if($timerRunning) {
-				
 				$time += microtime(true) - $starttime;
 			}
 			
 			if($this->testSuccessful) {
-				return array(true, '', $time);
+				return array(true, implode(':',$timeLog)  , $time);
 			}
 		}
 		return array(false);

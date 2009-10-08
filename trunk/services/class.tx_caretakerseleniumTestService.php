@@ -158,8 +158,8 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				'host'		=> $server['host'],
 				'title'     => $server['title'],
 				'browser' 	=> $server['browser'],
-				'message'  => $msg,
-				'time'     => round($time, 2)
+				'message'   => $msg,
+				'time'      => round($time, 2)
 			);
 
 			if ( $time > $max_time ) $max_time = $time;
@@ -168,10 +168,10 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_error';
 				$num_error ++;
 			} else {
-				if ($whole_time > $error_time ){
+				if ($time > $error_time ){
 					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
 					$num_error ++;
-				} else if  ($whole_time > $warning_time){
+				} else if  ($time > $warning_time){
 					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
 					$num_warning ++;
 				} else {
@@ -198,7 +198,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR,   round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
 		}
 
-		if ( $num_warnings > 0 ) {
+		if ( $num_warning > 0 ) {
 			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
 		}
 

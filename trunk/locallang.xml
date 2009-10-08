@@ -25,9 +25,9 @@
 			<label index="selenium_info_ok">Test passed on all ###VALUE_NUM_SERVERS### clients</label>
 			<label index="selenium_info_problems">Test passed on ###VALUE_NUM_OK### clients. ###VALUE_NUM_ERROR### Errors, ###VALUE_NUM_WARNINGS### Warnings.</label>
 			
-			<label index="selenium_detail_ok">Test passed on ###VALUE_TITLE### in ###VALUE_TIME### seconds</label>
-			<label index="selenium_detail_error">Test failed on ###VALUE_TITLE### in ###VALUE_TIME### seconds</label>
-			<label index="selenium_detail_timeout">Test passed on ###VALUE_TITLE### but took ###VALUE_TIME### seconds</label>
+			<label index="selenium_detail_ok">Test passed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. [###VALUE_MESSAGE###] </label>
+			<label index="selenium_detail_error">Test failed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. [###VALUE_MESSAGE###] </label>
+			<label index="selenium_detail_timeout">Test passed on ###VALUE_TITLE### but took ###VALUE_TIME### seconds. [###VALUE_MESSAGE###] </label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
@@ -36,9 +36,9 @@
 			<label index="selenium_info_ok">Der Test verlief auf allen ###VALUE_NUM_SERVERS### Clients erfolgreich.</label>
 			<label index="selenium_info_problems">Der Test funktionierte auf ###VALUE_NUM_OK### Clients. Es gab ###VALUE_NUM_ERROR### Fehler und ###VALUE_NUM_WARNINGS### Warnungen.</label>
 
-			<label index="selenium_detail_ok">Der Test lief korrekt auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden</label>
-			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden</label>
-			<label index="selenium_detail_timeout">Der Test lief korrekt auf ###VALUE_TITLE### aber dauerte ###VALUE_TIME### Sekunden</label>
+			<label index="selenium_detail_ok">Der Test lief korrekt auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. [###VALUE_MESSAGE###] </label>
+			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. [###VALUE_MESSAGE###] </label>
+			<label index="selenium_detail_timeout">Der Test lief korrekt auf ###VALUE_TITLE### aber dauerte ###VALUE_TIME### Sekunden. [###VALUE_MESSAGE###] </label>
 		</languageKey>
 	</data>
 </T3locallang>
