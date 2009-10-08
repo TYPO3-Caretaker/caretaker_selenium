@@ -88,7 +88,7 @@ class tx_caretakerselenium_SeleniumTest {
 			$starttime = microtime(true); // time is started automatically
 			$lastRound = $starttime;
 			$timerRunning = true; // indicates if the timer is running
-			$timeLog = array();
+			$timeLogArray = array();
 			
 			// no automatic timer anymore
 			
@@ -123,7 +123,7 @@ class tx_caretakerselenium_SeleniumTest {
 						case '@stopTimer': 
 						
 							if($timerRunning) {
-								$timeLog[] = microtime(true) - $lastRound.' '.$command->comment;
+								$timeLogArray[] = microtime(true) - $lastRound.' '.$command->comment;
 								$lastRound = microtime(true);
 								$time += microtime(true) - $starttime;
 								$timerRunning = false;
@@ -146,7 +146,7 @@ class tx_caretakerselenium_SeleniumTest {
 						
 						$msg .= ' Comment: '.$command->comment."\n";
 					}
-					return array(false,$msg.' '.implode(':',$timeLog),0);
+					return array(false,$msg.' '.implode(':',$timeLogArray),0);
 				}
 			}
 			
@@ -156,7 +156,9 @@ class tx_caretakerselenium_SeleniumTest {
 			}
 			
 			if($this->testSuccessful) {
-				return array(true, implode(':',$timeLog)  , $time);
+				return array(true, implode(':',$timeLogArray)  , $time);
+			} else {
+				return array(false, implode(':',$timeLogArray)  , $time);
 			}
 		}
 		return array(false);
