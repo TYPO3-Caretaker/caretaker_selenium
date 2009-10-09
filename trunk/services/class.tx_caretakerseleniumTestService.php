@@ -40,10 +40,18 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	protected $valueDescription = 'LLL:EXT:caretaker_selenium/locallang.xml:seconds';
 	
-	public function getValueDescription(){
-		
-		return $this->valueDescription;
-	}
+	/**
+	 * Service type description in human readble form.
+	 * @var string
+	 */
+	protected $typeDescription = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_service_description';
+
+	/**
+	 * Template to display the test Configuration in human readable form.
+	 * @var string
+	 */
+	protected $configurationInfoTemplate = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_service_configuration';
+	
 	
 	/**
 	 * Checks if all selenium servers that are needed for this test are free
@@ -169,10 +177,10 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				$num_error ++;
 			} else {
 				if ($time > $error_time ){
-					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
+					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout_error';
 					$num_error ++;
 				} else if  ($time > $warning_time){
-					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout';
+					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout_warning';
 					$num_warning ++;
 				} else {
 					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_ok';

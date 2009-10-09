@@ -27,7 +27,11 @@
 			
 			<label index="selenium_detail_ok">Test passed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_error">Test failed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
-			<label index="selenium_detail_timeout">Test passed on ###VALUE_TITLE### but took ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
+			<label index="selenium_detail_timeout_error">Test failed on ###VALUE_TITLE### beause of timeout in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
+			<label index="selenium_detail_timeout_warning">Test returned warning on ###VALUE_TITLE### beause of timeout in ###VALUE_TIME### seconds ###VALUE_MESSAGE### </label>
+
+			<label index="selenium_service_description">Selenium Test</label>
+			<label index="selenium_service_configuration">Warning: ###RESPONSE_TIME_WARNING### S Error: ###RESPONSE_TIME_ERROR### S</label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
@@ -38,7 +42,9 @@
 
 			<label index="selenium_detail_ok">Der Test lief korrekt auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE## </label>
-			<label index="selenium_detail_timeout">Der Test lief korrekt auf ###VALUE_TITLE### aber dauerte ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
+			<label index="selenium_detail_timeout_error">Der Test auf ###VALUE_TITLE### ergab einen Fehler wegen Zeitüberschreitung nach ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
+			<label index="selenium_detail_timeout_warning">Der Test auf ###VALUE_TITLE### ergab eine Warnung wegen Zeitüberschreitung nach ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
+
 		</languageKey>
 	</data>
 </T3locallang>

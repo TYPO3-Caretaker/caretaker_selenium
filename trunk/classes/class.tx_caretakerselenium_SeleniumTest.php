@@ -123,7 +123,7 @@ class tx_caretakerselenium_SeleniumTest {
 						case '@stopTimer': 
 						
 							if($timerRunning) {
-								$timeLogArray[] = microtime(true) - $lastRound.' '.$command->comment;
+								$timeLogArray[] = round( microtime(true) - $lastRound.' '.$command->comment , 2 );
 								$lastRound = microtime(true);
 								$time += microtime(true) - $starttime;
 								$timerRunning = false;
