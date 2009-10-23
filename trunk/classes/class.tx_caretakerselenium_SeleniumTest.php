@@ -96,7 +96,7 @@ class tx_caretakerselenium_SeleniumTest {
 							$starttime = microtime(true);
 							$lastRound = $starttime;
 							$timerRunning = true;
-							if (count($timeLogArray)) $timeLogArray[] = ':resetTimeLog:';y
+							if (count($timeLogArray)) $timeLogArray[] = ':resetTimeLog:';
 							break;
 
 						case '@startTimer':
