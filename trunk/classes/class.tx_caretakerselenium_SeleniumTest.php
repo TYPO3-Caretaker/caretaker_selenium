@@ -6,11 +6,9 @@ require_once 'class.tx_caretakerselenium_SeleniumCommand.php';
 /**
 tx_caretakerselenium_SeleniumTest manages the commands and executes them through a tx_caretakerseleneium_Selenium
 
-Added IE Fix: In Internet Explorer waitForLocation includes waitForPageToLoad, so this must be caught to avoid a
-timeout.
-
-Added custom timer: You can start the test timer by adding '@startTimer:' into your selenese commands. Every call
-resets the start time. You can stop the timer by adding '@stopTimer:' into your selenese commands. Only the first
+Added custom timer: You can start the test timer by adding '@startTimer:' into your selenese commands.
+If you want to reset the time just add '@resetTimer:' to your commmands.
+You can stop the timer by adding '@stopTimer:' into your selenese commands. Only the first
 call is interpreted. So take care you place your timer commands.
 */
 
@@ -49,7 +47,6 @@ class tx_caretakerselenium_SeleniumTest {
   			$this->commandsLoaded = true;  		
   			$this->sel->start();
   		}
-  		
   	}
 	
 	function tearDown() {
@@ -81,8 +78,8 @@ class tx_caretakerselenium_SeleniumTest {
 			$lastRound = $starttime;
 			$timerRunning = true; // indicates if the timer is running
 			$timeLogArray = array();
-			
-			foreach($this->commands as $command) {
+
+                        foreach($this->commands as $command) {
 				
 				// @ indicates a custom command
 				if(substr($command->command, 0, 1) == '@') {
@@ -103,6 +100,7 @@ class tx_caretakerselenium_SeleniumTest {
 							
 							if(!$timerRunning) {
 								$starttime = microtime(true);
+                                                                $lastRound = $starttime;
 								$timerRunning = true;
 							}
 							break;
@@ -159,26 +157,27 @@ class tx_caretakerselenium_SeleniumTest {
   			fwrite(STDERR,'An error occured: No commands were found!'."\n");
   			return false;
   		}
-  		$lineNumber = 0;
-  		
+  		$lineNumber = 1;
+  		$lastCommand;
+
   		foreach($commandsLines as $command) {
-  			$command = trim($command);
+
+                    	$command = trim($command);
   			$firstChar = substr(trim($command),0,1);
   			if( !empty($command) && ($firstChar != '-' && $firstChar != '#' && $firstChar != ':' ) ) {
   			
-  				if(!empty($com)) {
-					$this->commands[] = $com;
-				}
   				$commandText = substr($command,0,strpos($command,':'));
   				$commentText = substr($command,strpos($command,':') + 1);
-  				$com = new tx_caretakerselenium_SeleniumCommand($commandText,$lineNumber + 1,$commentText);
-  				$paramCount = 1;
+  				$lastCommand = new tx_caretakerselenium_SeleniumCommand($commandText, $lineNumber, $commentText);
+                                $paramCount = 1;
+
+                                $this->commands[] = $lastCommand;
   				
   			} elseif($firstChar == '-') {
   			
 	  			if(!empty($paramCount) && $paramCount < 2) {
 	  			
-	  				if(!$com->addParam(trim(substr($command,1)))) {
+	  				if(!$lastCommand->addParam(trim(substr($command,1)))) {
 	  				
 	  					$paramCount++;
 	  					fwrite(STDERR,'There are too many parameters for that command or wrong syntax at line'.$lineNumber.'.'."\n");
@@ -187,7 +186,7 @@ class tx_caretakerselenium_SeleniumTest {
 	  			}
 	  		} elseif($firstChar == ':') {
 	  			
-	  			$com->addComment(trim(substr($command,1)));
+	  			$lastCommand->addComment(trim(substr($command,1)));
 	  		}
   			$lineNumber++;
   		}
