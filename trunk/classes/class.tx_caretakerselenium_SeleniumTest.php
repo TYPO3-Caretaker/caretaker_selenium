@@ -58,14 +58,6 @@ class tx_caretakerselenium_SeleniumTest {
 	
 	}
 	
-	/*function startTests() {
-		if($this->commandsLoaded) {
-		
-			$this->testMyTestCase();
-		}
-	}*/
-
-	
 	/**
 	 * added advanced timer functionality
 	 * 
@@ -90,12 +82,6 @@ class tx_caretakerselenium_SeleniumTest {
 			$timerRunning = true; // indicates if the timer is running
 			$timeLogArray = array();
 			
-			// no automatic timer anymore
-			
-			// start the timer just before the first commands are send
-			//$starttime = microtime(true);
-			//$timerRunning = true;
-			
 			foreach($this->commands as $command) {
 				
 				// @ indicates a custom command
@@ -108,13 +94,14 @@ class tx_caretakerselenium_SeleniumTest {
 						case '@resetTimer':
 
 							$starttime = microtime(true);
+							$lastRound = $starttime;
 							$timerRunning = true;
+							if (count($timeLogArray)) $timeLogArray[] = ':resetTimeLog:';y
 							break;
 
 						case '@startTimer':
 							
 							if(!$timerRunning) {
-
 								$starttime = microtime(true);
 								$timerRunning = true;
 							}
@@ -123,7 +110,7 @@ class tx_caretakerselenium_SeleniumTest {
 						case '@stopTimer': 
 						
 							if($timerRunning) {
-								$timeLogArray[] = round( microtime(true) - $lastRound.' '.$command->comment , 2 );
+								$timeLogArray[] = round( microtime(true) - $lastRound,  2).' '.$command->comment ;
 								$lastRound = microtime(true);
 								$time += microtime(true) - $starttime;
 								$timerRunning = false;
