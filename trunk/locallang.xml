@@ -41,7 +41,7 @@
 			<label index="selenium_info_problems">Der Test funktionierte auf ###VALUE_NUM_OK### Clients. Es gab ###VALUE_NUM_ERROR### Fehler und ###VALUE_NUM_WARNING### Warnungen.</label>
 
 			<label index="selenium_detail_ok">Der Test lief korrekt auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
-			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE## </label>
+			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_timeout_error">Der Test auf ###VALUE_TITLE### ergab einen Fehler wegen Zeitüberschreitung nach ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_timeout_warning">Der Test auf ###VALUE_TITLE### ergab eine Warnung wegen Zeitüberschreitung nach ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
 
