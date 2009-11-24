@@ -198,7 +198,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		$values = array( 'num_servers'=>$num_servers, 'num_ok' => $num_ok, 'num_warning'=>$num_warning, 'num_error' =>$num_error, 'time'=>$whole_time );
 		$submessages = array();
 		foreach ($details as $detail){
-			$submessages =  new tx_caretaker_ResultMessage( $detail['message'], $detail['values'] );
+			$submessages[] =  new tx_caretaker_ResultMessage( $detail['message'], $detail['values'] );
 		}
 
 			// create results
