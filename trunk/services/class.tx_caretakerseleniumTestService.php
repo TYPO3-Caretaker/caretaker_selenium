@@ -194,23 +194,29 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			// set the servers free
 		$this->setServersBusy($servers, false);
 
+			
+		$values = array( 'num_servers'=>$num_servers, 'num_ok' => $num_ok, 'num_warning'=>$num_warning, 'num_error' =>$num_error, 'time'=>$whole_time );
+		$submessages = array();
+		foreach ($details as $detail){
+			$submessages =  new tx_caretaker_ResultMessage( $detail['message'], $detail['values'] );
+		}
 
-			// 
-		$info_array = array(
-			'values'  => array( 'num_servers'=>$num_servers, 'num_ok' => $num_ok, 'num_warning'=>$num_warning, 'num_error' =>$num_error, 'time'=>$whole_time ),
-			'details' => $details
-		);
-
-			// calculate results
+			// create results
 		if ( $num_error > 0 )  {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR,   round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
+			$value   = round($max_time, 2);
+			$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems', $values );
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $value , $message , $submessages );
 		}
 
 		if ( $num_warning > 0 ) {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems' , $info_array );
+			$value   = round($max_time, 2);
+			$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems', $values );
+			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $value , $message , $submessages );
 		}
 
-		return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK ,    round($max_time, 2), 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok'       , $info_array );
+		$value   = round($max_time, 2);
+		$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok', $values );
+		return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK , $value , $message , $submessages );
 		
 	}
 	
