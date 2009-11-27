@@ -25,7 +25,7 @@
 			<label index="tx_caretakerselenium_server.title">Title</label>
 			<label index="tx_caretakerselenium_server.hostname">Hostname / IP</label>
 			<label index="tx_caretakerselenium_server.browser">Browser Key</label>
-
+			<label index="tx_caretakerselenium_server.selftesInstanceUid">Selftest Instance (optional)</label>
 			
 		</languageKey>
 		<languageKey index="de" type="array">

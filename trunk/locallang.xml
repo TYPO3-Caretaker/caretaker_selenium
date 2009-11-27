@@ -21,9 +21,11 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="selenium_configuration_error">Selenium server was not properly configured</label>
-			
+			<label index="selenium_serverfailure">The selected Selenium Servers are offline. The test could'nt run.</label>
+
 			<label index="selenium_info_ok">Test passed on all ###VALUE_NUM_SERVERS### clients</label>
 			<label index="selenium_info_problems">Test passed on ###VALUE_NUM_OK### clients. ###VALUE_NUM_ERROR### Errors, ###VALUE_NUM_WARNING### Warnings.</label>
+			<label index="selenium_info_serverfailure">The Selenium Server ###VALUE_TITLE### was not available and was skipped.</label>
 			
 			<label index="selenium_detail_ok">Test passed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_error">Test failed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
@@ -36,9 +38,11 @@
 
 		<languageKey index="de" type="array">
 			<label index="selenium_configuration_error">Der Selenium-Server ist nicht korrekt konfiguriert</label>
+			<label index="selenium_serverfailure">Die gewählten Selenium-Server sind offline. Der Test konnte nicht ausgeführt werden.</label>
 
 			<label index="selenium_info_ok">Der Test verlief auf allen ###VALUE_NUM_SERVERS### Clients erfolgreich.</label>
 			<label index="selenium_info_problems">Der Test funktionierte auf ###VALUE_NUM_OK### Clients. Es gab ###VALUE_NUM_ERROR### Fehler und ###VALUE_NUM_WARNING### Warnungen.</label>
+			<label index="selenium_info_serverfailure">Der Selenium Server ###VALUE_TITLE### war nicht verfügbar und wurde übersprungen.</label>
 
 			<label index="selenium_detail_ok">Der Test lief korrekt auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_error">Der Test versagte auf ###VALUE_TITLE### in ###VALUE_TIME### Sekunden. ###VALUE_MESSAGE### </label>

@@ -97,22 +97,17 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	public function runTest(){
 		
-		//echo 'This is the retreived configuration:'."\n";
-		//print_r($this->flexform_configuration);
-				
 		$commands     = $this->getConfigValue('selenium_configuration');
-		
-		//print_r($commands);
-		
 		$error_time   = $this->getConfigValue('response_time_error');
 		$warning_time = $this->getConfigValue('response_time_warning');
 		
 		$server       = $this->getConfigValue('selenium_server');
 		
-		$servers = array();
+		$activeServers   = array();
+		$inactiveServers = array();
 		
 		if (is_array($server)){
-			$servers[] = array(
+			$activeServers[] = array(
 				'uid' => $server['uid'],
 				'title' => $server['title'],
 				'host'    => $server['host'],
@@ -126,22 +121,56 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
 				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				if ($row){
-					$servers[] = array(
-						'uid' => $sid,
-						'title' => $row['title'],
-						'host'    => $row['hostname'],
-						'browser' => $row['browser']
-					);
+
+						// check server if selftest is set
+					$serverSelftestOk = FALSE;
+					if ( ! $row['selftesInstanceUid'] ) {
+						$serverSelftestOk = TRUE;
+					} else {
+						$nodeRepository = tx_caretaker_NodeRepository::getInstance();
+						$instanceNode   = $nodeRepository->getInstanceByUid( $row['selftesInstanceUid'] );
+
+							// allow selftest 
+						if ($instanceNode->getUid() == $this->instance->getUID() ) {
+							$serverSelftestOk = TRUE;
+						} 
+							// check status of selftest instance nodes
+						else {
+							$instanceResult = $instanceNode->getTestResult();
+							$serverSelftestOk = ( $instanceResult->getState() == TX_CARETAKER_STATE_OK ) ? TRUE : FALSE ;
+						}
+					}
+					
+						// add only tested servers
+					if ($serverSelftestOk){
+						$activeServers[] = array(
+							'uid' => $sid,
+							'title' => $row['title'],
+							'host'    => $row['hostname'],
+							'browser' => $row['browser']
+						);
+					} else {
+						$inactiveServers[] = array(
+							'uid' => $sid,
+							'title' => $row['title'],
+							'host'    => $row['hostname'],
+							'browser' => $row['browser']
+						);
+					}
 				}
 			}			
 		}
 
-		if (count($servers) == 0 ) {
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_configuration_error');
+		if (count($activeServers) == 0 ) {
+			if (count($inactiveServers) > 0){
+				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_UNDEFINED, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_serverfailure');
+			} else {
+				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_configuration_error');
+			}
 		}
 		
 		// set the servers busy
-		$this->setServersBusy($servers);
+		$this->setServersBusy($activeServers);
 		
 		$baseURL = $this->instance->getUrl(); 
 		
@@ -155,7 +184,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 		$details = array();
 		
-		foreach ($servers as $server){
+		foreach ($activeServers as $server){
 			$num_servers ++;
 
 			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
@@ -192,13 +221,20 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		}
 		
 			// set the servers free
-		$this->setServersBusy($servers, false);
+		$this->setServersBusy($activeServers, false);
 
 			
 		$values = array( 'num_servers'=>$num_servers, 'num_ok' => $num_ok, 'num_warning'=>$num_warning, 'num_error' =>$num_error, 'time'=>$whole_time );
+
+			// submessages for subresults
 		$submessages = array();
 		foreach ($details as $detail){
 			$submessages[] =  new tx_caretaker_ResultMessage( $detail['message'], $detail['values'] );
+		}
+
+			// submessages for serverfailures
+		foreach ($inactiveServers as $inactiveServer){
+			$submessages[] =  new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_serverfailure', $inactiveServer );
 		}
 
 			// create results

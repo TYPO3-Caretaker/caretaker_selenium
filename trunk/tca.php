@@ -98,11 +98,25 @@ $TCA['tx_caretakerselenium_server'] = array (
 				'eval' => 'trim',
 			)
 		),
+		'selftesInstanceUid' => Array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.selftesInstanceUid',
+			'config' => Array (
+				'type' => 'select',
+				'foreign_table' => 'tx_caretaker_instance',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'size' => 1,
+				'default' => 0,
+				'items' => array ( array ('--none--' , 0) )
+				
+			)
+		),
 			
 	
 	),
 	'types' => array (
-		'0' => array('showitem' => 'title;;1;;1-1-1, hostname, browser')
+		'0' => array('showitem' => 'title;;1;;1-1-1, hostname, browser, selftesInstanceUid')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'hidden, starttime,endtime,fe_group'),
