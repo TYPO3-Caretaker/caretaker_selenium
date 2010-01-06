@@ -98,9 +98,9 @@ $TCA['tx_caretakerselenium_server'] = array (
 				'eval' => 'trim',
 			)
 		),
-		'selftesInstanceUid' => Array (
+		'selftestInstanceUid' => Array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.selftesInstanceUid',
+			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.selftestInstanceUid',
 			'config' => Array (
 				'type' => 'select',
 				'foreign_table' => 'tx_caretaker_instance',

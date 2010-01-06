@@ -22,7 +22,7 @@ CREATE TABLE tx_caretakerselenium_server (
 	hostname varchar(255) DEFAULT '' NOT NULL,
 	browser varchar(255) DEFAULT '' NOT NULL,
 	inUseSince int(11) DEFAULT '0' NOT NULL,
-	selftesInstanceUid varchar(255) DEFAULT '' NOT NULL,
+	selftestInstanceUid varchar(255) DEFAULT '' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -124,21 +124,25 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 						// check server if selftest is set
 					$serverSelftestOk = FALSE;
-					if ( ! $row['selftesInstanceUid'] ) {
+					if ( ! $row['selftestInstanceUid'] ) {
 						$serverSelftestOk = TRUE;
 					} else {
 						$nodeRepository = tx_caretaker_NodeRepository::getInstance();
-						$instanceNode   = $nodeRepository->getInstanceByUid( $row['selftesInstanceUid'] );
+						$instanceNode   = $nodeRepository->getInstanceByUid( $row['selftestInstanceUid'] );
 
-							// allow selftest 
-						if ($instanceNode->getUid() == $this->instance->getUID() ) {
+							// allow selftest
+						if ( !$instanceNode ) {
 							$serverSelftestOk = TRUE;
+						} else {
+							if ( $instanceNode->getUid() == $this->instance->getUID()  ) {
+								$serverSelftestOk = TRUE;
+							}
+								// check status of selftest instance nodes
+							else {
+								$instanceResult = $instanceNode->getTestResult();
+								$serverSelftestOk = ( $instanceResult->getState() == TX_CARETAKER_STATE_OK ) ? TRUE : FALSE ;
+							}
 						} 
-							// check status of selftest instance nodes
-						else {
-							$instanceResult = $instanceNode->getTestResult();
-							$serverSelftestOk = ( $instanceResult->getState() == TX_CARETAKER_STATE_OK ) ? TRUE : FALSE ;
-						}
 					}
 					
 						// add only tested servers
