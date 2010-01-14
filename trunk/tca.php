@@ -116,7 +116,7 @@ $TCA['tx_caretakerselenium_server'] = array (
 	
 	),
 	'types' => array (
-		'0' => array('showitem' => 'title;;1;;1-1-1, hostname, browser, selftesInstanceUid')
+		'0' => array('showitem' => 'title;;1;;1-1-1, hostname, browser, selftestInstanceUid')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'hidden, starttime,endtime,fe_group'),
