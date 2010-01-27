@@ -59,7 +59,7 @@ class tx_caretakerselenium_Selenium_testcase extends tx_phpunit_testcase  {
 		);
 		
 		$result   = $test->runTest($instance);
-		$this->assertEquals( $result->getState(), TX_CARETAKER_STATE_OK, 'State was not OK' );
+		$this->assertEquals( $result->getState(), tx_caretaker_Constants::state_ok, 'State was not OK' );
 	}
 	
 }

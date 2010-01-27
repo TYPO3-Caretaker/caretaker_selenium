@@ -153,7 +153,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 								// check status of selftest instance nodes
 							else {
 								$instanceResult = $instanceNode->getTestResult();
-								$serverSelftestOk = ( $instanceResult->getState() == TX_CARETAKER_STATE_OK ) ? TRUE : FALSE ;
+								$serverSelftestOk = ( $instanceResult->getState() == tx_caretaker_Constants::state_ok ) ? TRUE : FALSE ;
 							}
 						} 
 					}
@@ -180,9 +180,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 		if (count($activeServers) == 0 ) {
 			if (count($inactiveServers) > 0){
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_UNDEFINED, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_serverfailure');
+				return tx_caretaker_TestResult::create(tx_caretaker_Constants::state_undefined, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_serverfailure');
 			} else {
-				return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_configuration_error');
+				return tx_caretaker_TestResult::create(tx_caretaker_Constants::state_error, 0, 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_configuration_error');
 			}
 		}
 		
@@ -258,18 +258,18 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		if ( $num_error > 0 )  {
 			$value   = round($max_time, 2);
 			$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems', $values );
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_ERROR, $value , $message , $submessages );
+			return tx_caretaker_TestResult::create(tx_caretaker_Constants::state_error, $value , $message , $submessages );
 		}
 
 		if ( $num_warning > 0 ) {
 			$value   = round($max_time, 2);
 			$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_problems', $values );
-			return tx_caretaker_TestResult::create(TX_CARETAKER_STATE_WARNING, $value , $message , $submessages );
+			return tx_caretaker_TestResult::create(tx_caretaker_Constants::state_warning, $value , $message , $submessages );
 		}
 
 		$value   = round($max_time, 2);
 		$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok', $values );
-		return tx_caretaker_TestResult::create( TX_CARETAKER_STATE_OK , $value , $message , $submessages );
+		return tx_caretaker_TestResult::create( tx_caretaker_Constants::state_ok , $value , $message , $submessages );
 		
 	}
 	
