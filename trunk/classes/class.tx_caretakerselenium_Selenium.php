@@ -95,6 +95,9 @@ class tx_caretakerselenium_Selenium
      */
     public function start() {
         $this->sessionId = $this->getString("getNewBrowserSession", array($this->browser, $this->browserUrl));
+		if(empty($sessionId)) {
+			throw new Exception('SessionId is null. Browser seems not to be started.');
+		}
         return $this->sessionId;
     }
 
