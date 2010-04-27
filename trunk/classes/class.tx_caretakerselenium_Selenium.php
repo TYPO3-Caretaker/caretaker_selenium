@@ -93,17 +93,9 @@ class tx_caretakerselenium_Selenium
      * @access public
      * @return void
      */
-    public function start()
-    {
-        $result = $this->doCommand("getNewBrowserSession", array($this->browser, $this->browserUrl));
-        if (strlen($result) > 3) {
-        	
-        	$this->sessionId = substr($result, 3);
-        	return $this->sessionId;
-        } else {
-        	return false;
-        }
-        
+    public function start() {
+        $this->sessionId = $this->getString("getNewBrowserSession", array($this->browser, $this->browserUrl));
+        return $this->sessionId;
     }
 
     /**
@@ -122,8 +114,7 @@ class tx_caretakerselenium_Selenium
 		return $this->doCommand($command->command,$command->params);
 	}
 
-    protected function doCommand($verb, $args = array())
-    {
+    protected function doCommand($verb, $args = array()) {
         $url = sprintf('http://%s:%s/selenium-server/driver/?cmd=%s', $this->host, $this->port, urlencode($verb));
         for ($i = 0; $i < count($args); $i++) {
             $argNum = strval($i + 1);
@@ -135,7 +126,7 @@ class tx_caretakerselenium_Selenium
         }
 
         if (!$handle = fopen($url, 'r')) {
-            //throw new tx_caretakerselenium_SeleniumException('Cannot connected to Selenium RC Server');
+            throw new Exception('Cannot connected to Selenium RC Server');
         }
 
         stream_set_blocking($handle, false);
@@ -143,6 +134,59 @@ class tx_caretakerselenium_Selenium
         fclose($handle);
 
         return $response;
+    }
+
+	private function getNumber($verb, $args = array())
+    {
+        $result = $this->getString($verb, $args);
+
+        if (!is_numeric($result)) {
+            throw new Exception('result is not numeric.');
+        }
+        return $result;
+    }
+
+    protected function getString($verb, $args = array()) {
+        $result = $this->doCommand($verb, $args);
+        return (strlen($result) > 3) ? substr($result, 3) : '';
+    }
+
+    private function getStringArray($verb, $args = array()) {
+        $csv = $this->getString($verb, $args);
+        $token = '';
+        $tokens = array();
+        $letters = preg_split('//', $csv, -1, PREG_SPLIT_NO_EMPTY);
+        for ($i = 0; $i < count($letters); $i++) {
+            $letter = $letters[$i];
+            switch($letter) {
+            case '\\':
+                $i++;
+                $letter = $letters[$i];
+                $token = $token . $letter;
+                break;
+            case ',':
+                array_push($tokens, $token);
+                $token = '';
+                break;
+            default:
+                $token = $token . $letter;
+                break;
+            }
+        }
+        array_push($tokens, $token);
+        return $tokens;
+    }
+
+    private function getBoolean($verb, $args = array()) {
+        $result = $this->getString($verb, $args);
+        switch ($result) {
+        case 'true':
+            return true;
+        case 'false':
+            return false;
+        default:
+            throw new Exception('result is neither "true" or "false": ' . $result);
+        }
     }
    
 
