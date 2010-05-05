@@ -186,7 +186,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			}
 		}
 		
-		// set the servers busy
+			// set the servers busy
 		$this->setServersBusy($activeServers);
 		
 		$baseURL = $this->instance->getUrl(); 
@@ -288,13 +288,13 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				
 				// set the selenium servers needed for that test to busy state
 				// for that set the inUseSince timestamp to the current time
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time()));
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time() ) );
 				
 			} else {
 				
 				// set the selenium servers needed for that test to free state
 				// for that set the inUseSince timestamp to the current time minus one hour and one second
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time() - 3601));
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => 0) );
 			}
 			
 		}
