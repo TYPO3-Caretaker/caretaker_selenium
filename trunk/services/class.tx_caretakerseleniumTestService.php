@@ -271,9 +271,15 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			return tx_caretaker_TestResult::create(tx_caretaker_Constants::state_warning, $value , $message , $submessages );
 		}
 
+		if ( $num_ok > 0){
+			$value   = round($max_time, 2);
+			$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok', $values );
+			return tx_caretaker_TestResult::create( tx_caretaker_Constants::state_ok , $value , $message , $submessages );
+		}
+
 		$value   = round($max_time, 2);
-		$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_ok', $values );
-		return tx_caretaker_TestResult::create( tx_caretaker_Constants::state_ok , $value , $message , $submessages );
+		$message = new tx_caretaker_ResultMessage( 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_undefined', $values );
+		return tx_caretaker_TestResult::create( tx_caretaker_Constants::state_undefined , $value , $message , $submessages );
 		
 	}
 
