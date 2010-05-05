@@ -92,19 +92,15 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		} else {
 			
 			$server_ids = explode(',',$server);
-			
-			foreach($server_ids as $sid) {
-				
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
-				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				
-				if ($row['inUseSince'] + 3600 > time()){
-					
-					return false; // server is in use and can NOT be used
+			$result = false;
+
+			foreach($server_ids as $server_idsid) {
+				if ( $this->getServerFree( $$server_id ) ){
+					$result = true; // server is in use and can NOT be used
 				}
 			}
-			
-			return true; // servers are free and can be used
+			// at least 1 server is free and can be used
+			return $result; 
 		}
 	}
 	
@@ -201,45 +197,50 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		$details = array();
 		
 		foreach ($activeServers as $server){
-			$num_servers ++;
 
-				// set the servers busy
-			$this->setServerBusy($server);
+			if ( $this->getServerFree($server['uid']) ){
+				$num_servers ++;
 
-			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
-			list($success, $msg, $time) = $test->run();
+					// set the servers busy
+				$this->setServerBusy($server['uid']);
 
-				// set the servers free
-			$this->setServerFree($server);
+				$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
+				list($success, $msg, $time) = $test->run();
 
-			$values  = array(
-				'success'	=> $success,
-				'host'		=> $server['host'],
-				'title'     => $server['title'],
-				'browser' 	=> $server['browser'],
-				'message'   => $msg,
-				'time'      => round($time, 2)
-			);
+					// set the servers free
+				$this->setServerFree($server['uid']);
 
-			if ( $time > $max_time ) $max_time = $time;
-			
-			if (!$success){
-				$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_error';
-				$num_error ++;
-			} else {
-				if ($time > $error_time ){
-					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout_error';
+				$values  = array(
+					'success'	=> $success,
+					'host'		=> $server['host'],
+					'title'     => $server['title'],
+					'browser' 	=> $server['browser'],
+					'message'   => $msg,
+					'time'      => round($time, 2)
+				);
+
+				if ( $time > $max_time ) $max_time = $time;
+
+				if (!$success){
+					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_error';
 					$num_error ++;
-				} else if  ($time > $warning_time){
-					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout_warning';
-					$num_warning ++;
 				} else {
-					$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_ok';
-					$num_ok ++;
+					if ($time > $error_time ){
+						$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout_error';
+						$num_error ++;
+					} else if  ($time > $warning_time){
+						$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_timeout_warning';
+						$num_warning ++;
+					} else {
+						$message = 'LLL:EXT:caretaker_selenium/locallang.xml:selenium_detail_ok';
+						$num_ok ++;
+					}
 				}
-			}
 
-			$details[] = array( 'message'=>$message , 'values'=>$values );
+				$details[] = array( 'message'=>$message , 'values'=>$values );
+			} else {
+				$details[] = array( 'message'=>'Server ' . $server['uid'] . ':' . $server['title'] .  ' was busy and could not be used.' , 'values'=>array() );
+			}
 		}
 		
 		
@@ -280,18 +281,33 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	 * Set the server busy state by entering the current time in the inUseSince field
 	 * @param array $server SeleniumServer DB-Row
 	 */
-	private function setServerBusy($server) {
-		echo ("setServerBusy ".$server['title'].':'.$server['uid'] );
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$server['uid'], array('inUseSince' => time() ) );
+	protected function setServerBusy($serverId) {
+		// echo ("setServerBusy ".$server['title'].':'.$server['uid'] );
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.(int)$serverId, array('inUseSince' => time() ) );
 	}
 
 	/**
 	 * Set the serverfree state by entering 0 into the inUseSince field
 	 * @param array $server SeleniumServer DB-Row
 	 */
-	private function setServerFree($server) {
-		echo ("setServerFree ".$server['title'].':'.$server['uid'] );
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$server['uid'], array('inUseSince' => 0) );
+	protected function setServerFree($serverId) {
+		// echo ("setServerFree ".$server['title'].':'.$server['uid'] );
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.(int)$serverId, array('inUseSince' => 0) );
+	}
+
+	/**
+	 * Check weather the given selenium server is available
+	 * @param array $server SeleniumServer DB-Row $server
+	 */
+	protected function getServerFree($serverId){
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.(int)$serverId);
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+
+		if ( $row['inUseSince'] + 3600 < time()){
+			return true; 
+		} else {
+			return false;
+		}
 	}
 
 	private function setServersBusy($servers, $state = true) {
