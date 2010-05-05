@@ -309,7 +309,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.(int)$serverId);
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-		if ( $row['inUseSince'] + 3600 < time()){
+		if ( $row['inUseSince'] + 300 < time()){
 			return true; 
 		} else {
 			return false;
