@@ -281,6 +281,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	 * @param array $server SeleniumServer DB-Row
 	 */
 	private function setServerBusy($server) {
+		echo ("setServerBusy ".$server['title'].':'.$server['uid'] );
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$server['uid'], array('inUseSince' => time() ) );
 	}
 
@@ -289,6 +290,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	 * @param array $server SeleniumServer DB-Row
 	 */
 	private function setServerFree($server) {
+		echo ("setServerFree ".$server['title'].':'.$server['uid'] );
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$server['uid'], array('inUseSince' => 0) );
 	}
 
