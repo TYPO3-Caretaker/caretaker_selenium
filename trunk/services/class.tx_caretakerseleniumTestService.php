@@ -186,8 +186,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			}
 		}
 		
-			// set the servers busy
-		$this->setServersBusy($activeServers);
+		
 		
 		$baseURL = $this->instance->getUrl(); 
 		
@@ -204,9 +203,15 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		foreach ($activeServers as $server){
 			$num_servers ++;
 
+				// set the servers busy
+			$this->setServerBusy($server);
+
 			$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
 			list($success, $msg, $time) = $test->run();
-		
+
+				// set the servers free
+			$this->setServerFree($server);
+
 			$values  = array(
 				'success'	=> $success,
 				'host'		=> $server['host'],
@@ -237,9 +242,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			$details[] = array( 'message'=>$message , 'values'=>$values );
 		}
 		
-			// set the servers free
-		$this->setServersBusy($activeServers, false);
-
+		
 			
 		$values = array( 'num_servers'=>$num_servers, 'num_ok' => $num_ok, 'num_warning'=>$num_warning, 'num_error' =>$num_error, 'time'=>$whole_time );
 
@@ -272,7 +275,23 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		return tx_caretaker_TestResult::create( tx_caretaker_Constants::state_ok , $value , $message , $submessages );
 		
 	}
-	
+
+	/**
+	 * Set the server busy state by entering the current time in the inUseSince field
+	 * @param array $server SeleniumServer DB-Row
+	 */
+	private function setServerBusy($server) {
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$server['uid'], array('inUseSince' => time() ) );
+	}
+
+	/**
+	 * Set the serverfree state by entering 0 into the inUseSince field
+	 * @param array $server SeleniumServer DB-Row
+	 */
+	private function setServerFree($server) {
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$server['uid'], array('inUseSince' => 0) );
+	}
+
 	private function setServersBusy($servers, $state = true) {
 		
 		$serverIds = array();
