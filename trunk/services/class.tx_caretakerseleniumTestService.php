@@ -239,7 +239,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 				$details[] = array( 'message'=>$message , 'values'=>$values );
 			} else {
-				$details[] = array( 'message'=>'Server ' . $server['uid'] . ':' . $server['title'] .  ' was busy and could not be used.' , 'values'=>array() );
+				$details[] = array( 'message'=>'LLL:EXT:caretaker_selenium/locallang.xml:selenium_info_serverbusy' , 'values'=>$server );
 			}
 		}
 		

@@ -26,7 +26,8 @@
 			<label index="selenium_info_ok">Test passed on all ###VALUE_NUM_SERVERS### clients</label>
 			<label index="selenium_info_problems">Test passed on ###VALUE_NUM_OK### clients. ###VALUE_NUM_ERROR### Errors, ###VALUE_NUM_WARNING### Warnings.</label>
 			<label index="selenium_info_serverfailure">The Selenium Server ###VALUE_TITLE### was not available and was skipped.</label>
-			
+			<label index="selenium_info_serverbusy">The Selenium Server ###VALUE_TITLE### was marked busy and was skipped.</label>
+
 			<label index="selenium_detail_ok">Test passed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_error">Test failed on ###VALUE_TITLE### in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
 			<label index="selenium_detail_timeout_error">Test failed on ###VALUE_TITLE### beause of timeout in ###VALUE_TIME### seconds. ###VALUE_MESSAGE### </label>
