@@ -95,7 +95,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			$result = false;
 
 			foreach($server_ids as $server_idsid) {
-				if ( $this->getServerFree( $$server_id ) ){
+				if ( $this->getServerAvailability( $$server_id ) ){
 					$result = true; // server is in use and can NOT be used
 				}
 			}
@@ -198,7 +198,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 		
 		foreach ($activeServers as $server){
 
-			if ( $this->getServerFree($server['uid']) ){
+			if ( $this->getServerAvailability($server['uid']) ){
 				$num_servers ++;
 
 					// set the servers busy
@@ -285,7 +285,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 	/**
 	 * Set the server busy state by entering the current time in the inUseSince field
-	 * @param array $server SeleniumServer DB-Row
+	 * @param integer $serverId SeleniumServer UID
 	 */
 	protected function setServerBusy($serverId) {
 		// echo ("setServerBusy ".$server['title'].':'.$server['uid'] );
@@ -294,7 +294,7 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 	/**
 	 * Set the serverfree state by entering 0 into the inUseSince field
-	 * @param array $server SeleniumServer DB-Row
+	 * @param integer $serverId SeleniumServer UID
 	 */
 	protected function setServerFree($serverId) {
 		// echo ("setServerFree ".$server['title'].':'.$server['uid'] );
@@ -303,9 +303,9 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 
 	/**
 	 * Check weather the given selenium server is available
-	 * @param array $server SeleniumServer DB-Row $server
+	 * @param integer $serverId SeleniumServer UID
 	 */
-	protected function getServerFree($serverId){
+	protected function getServerAvailability($serverId){
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.(int)$serverId);
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
@@ -313,33 +313,6 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 			return true; 
 		} else {
 			return false;
-		}
-	}
-
-	private function setServersBusy($servers, $state = true) {
-		
-		$serverIds = array();
-		
-		foreach($servers as $server) {
-			
-			$serverIds[] = $server['uid'];
-		}
-		
-		foreach($serverIds as $sid) {
-			
-			if($state) {
-				
-				// set the selenium servers needed for that test to busy state
-				// for that set the inUseSince timestamp to the current time
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => time() ) );
-				
-			} else {
-				
-				// set the selenium servers needed for that test to free state
-				// for that set the inUseSince timestamp to the current time minus one hour and one second
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_caretakerselenium_server', 'uid='.$sid, array('inUseSince' => 0) );
-			}
-			
 		}
 	}
 }
