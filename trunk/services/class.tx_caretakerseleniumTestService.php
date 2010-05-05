@@ -204,8 +204,14 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 					// set the servers busy
 				$this->setServerBusy($server['uid']);
 
-				$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
-				list($success, $msg, $time) = $test->run();
+				try {
+					$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
+					list($success, $msg, $time) = $test->run();
+				} catch ( Exception $e ){
+					$success = false;
+					$msg     = $e->getMessage();
+					$time    = 0;
+				}
 
 					// set the servers free
 				$this->setServerFree($server['uid']);
