@@ -127,8 +127,8 @@ class tx_caretakerselenium_SeleniumTest {
 							
 						case '@pause':
 							$duration = ceil( $command->params[0] / 10000 );
-							if ($duration) {
-								sleep ($duration);
+							if ( $duration > 0 ) {
+								sleep ( $duration );
 							} else {
 								sleep (1);
 							}
