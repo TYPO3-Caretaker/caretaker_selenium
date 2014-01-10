@@ -21,6 +21,9 @@ CREATE TABLE tx_caretakerselenium_server (
 	title varchar(255) DEFAULT '' NOT NULL,
 	hostname varchar(255) DEFAULT '' NOT NULL,
 	browser varchar(255) DEFAULT '' NOT NULL,
+	browserWidth int(11) DEFAULT '1024' NOT NULL,
+	browserHeight int(11) DEFAULT '768' NOT NULL,
+	connectTimeout int(11) DEFAULT '30000' NOT NULL,
 	inUseSince int(11) DEFAULT '0' NOT NULL,
 	selftestInstanceUid varchar(255) DEFAULT '' NOT NULL,
 
