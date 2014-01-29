@@ -66,11 +66,11 @@ class tx_caretakerselenium_SeleniumTest {
 	}
 
 	protected function tearDown() {
-		// Close connection to selenium session
-		$this->sel->quit();
-
 		// Delete all cookies
 		$this->sel->manage()->deleteAllCookies();
+
+		// Close connection to selenium session
+		$this->sel->quit();
 	}
 
 	/**
