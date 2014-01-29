@@ -43,7 +43,18 @@ class tx_caretakerselenium_SeleniumTest {
 
 	public function run() {
 		$this->setUp();
-		$res = $this->testMyTestCase();
+
+		try {
+			$res = $this->testMyTestCase();
+		} catch (Exception $e) {
+			// Make sure that teardown runs even if there was
+			// an exception during the test
+			$this->tearDown();
+
+			// Bubble exception up to next catch
+			throw $e;
+		}
+
 		$this->tearDown();
 
 		return $res;
