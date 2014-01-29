@@ -59,6 +59,9 @@ class tx_caretakerselenium_SeleniumTest {
 			new \WebDriverDimension($this->browserWidth, $this->browserHeight)
 		);
 
+		// Delete all cookies
+		$this->sel->manage()->deleteAllCookies();
+
 		// Parse commands
 		if ($this->loadCommands()) {
 			$this->commandsLoaded = true;
