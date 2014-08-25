@@ -19,6 +19,7 @@ class tx_caretakerselenium_SeleniumTest {
 	protected $browserHeight;
 
 	protected $baseURL;
+	protected $screenshotPath;
 
 	protected $commands = array();
 	protected $commandsText = '';
@@ -26,7 +27,7 @@ class tx_caretakerselenium_SeleniumTest {
 
 	protected $testSuccessful = true;
 
-	public function __construct($commands, $browser, $baseUrl, $host, $connectTimeout = 5000, $browserWidth = 1280, $browserHeight = 960) {
+	public function __construct($commands, $browser, $baseUrl, $host, $connectTimeout = 5000, $browserWidth = 1280, $browserHeight = 960, $screenshotPath = null) {
 		// Selenium server information
 		$this->host = $host;
 		$this->connectTimeout = $connectTimeout;
@@ -39,6 +40,9 @@ class tx_caretakerselenium_SeleniumTest {
 
 		// Ensure that the base url has a trailling slash
 		$this->baseURL = rtrim($baseUrl, '/') . '/';
+
+		// Ensure that screenshot path has a trailling slash
+		$this->screenshotPath = (isset($screenshotPath)) ? rtrim($screenshotPath, '/') . '/' : false;
 	}
 
 	public function run() {
@@ -197,6 +201,14 @@ class tx_caretakerselenium_SeleniumTest {
 				$msg = 'An error occured: Command:' . $command->command . ' at line ' . $command->lineInFile . ' in your commands. Message: ' . $result->message;
 				if (!empty($command->comment)) {
 					$msg .= ' Comment: '.$command->comment."\n";
+				}
+
+				if ($this->screenshotPath) {
+					$screenshot = $this->sel->takeScreenshot();
+					$filename = $this->screenshotPath . md5($screenshot) . '.png';
+					file_put_contents($filename, $screenshot);
+
+					$msg .= ' Screenshot: ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . str_replace(PATH_site, '', $filename);
 				}
 			}
 

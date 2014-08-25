@@ -106,6 +106,13 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	public function runTest(){
 		
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['caretaker_selenium']);
+		if (isset($extConf['screenshot.']['path']) && is_writable(PATH_site . $extConf['screenshot.']['path'])) {
+			$screenshotPath = PATH_site . $extConf['screenshot.']['path'];
+		} else {
+			$screenshotPath = null;
+		}
+
 		$commands     = $this->getConfigValue('selenium_configuration');
 		$error_time   = $this->getConfigValue('response_time_error');
 		$warning_time = $this->getConfigValue('response_time_warning');
@@ -225,7 +232,8 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 						$server['host'],
 						$server['connectTimeout'],
 						$server['browserWidth'],
-						$server['browserHeight']
+						$server['browserHeight'],
+						$screenshotPath
 					);
 					list($success, $msg, $time) = $test->run();
 				} catch ( Exception $e ){
