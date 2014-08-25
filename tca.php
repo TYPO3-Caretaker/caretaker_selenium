@@ -98,6 +98,36 @@ $TCA['tx_caretakerselenium_server'] = array (
 				'eval' => 'trim',
 			)
 		),
+		'browserWidth' => Array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.browserWidth',
+			'config' => Array (
+				'type' => 'input',
+				'size' => '5',
+				'eval' => 'int',
+				'default' => 1024
+			)
+		),
+		'browserHeight' => Array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.browserHeight',
+			'config' => Array (
+				'type' => 'input',
+				'size' => '5',
+				'eval' => 'int',
+				'default' => 768
+			)
+		),
+		'connectTimeout' => Array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.connectTimeout',
+			'config' => Array (
+				'type' => 'input',
+				'size' => '6',
+				'eval' => 'int',
+				'default' => 30000
+			)
+		),
 		'selftestInstanceUid' => Array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:caretaker_selenium/locallang_db.xml:tx_caretakerselenium_server.selftestInstanceUid',
@@ -116,7 +146,7 @@ $TCA['tx_caretakerselenium_server'] = array (
 	
 	),
 	'types' => array (
-		'0' => array('showitem' => 'title;;1;;1-1-1, hostname, browser, selftestInstanceUid')
+		'0' => array('showitem' => 'title;;1;;1-1-1, hostname, connectTimeout, browser, browserWidth, browserHeight, selftestInstanceUid')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'hidden, starttime,endtime,fe_group'),

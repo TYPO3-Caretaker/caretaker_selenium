@@ -25,6 +25,9 @@
 			<label index="tx_caretakerselenium_server.title">Title</label>
 			<label index="tx_caretakerselenium_server.hostname">Hostname / IP</label>
 			<label index="tx_caretakerselenium_server.browser">Browser Key</label>
+			<label index="tx_caretakerselenium_server.browserWidth">Browser window width</label>
+			<label index="tx_caretakerselenium_server.browserHeight">Browser window height</label>
+			<label index="tx_caretakerselenium_server.connectTimeout">Timeout for connection to Selenium server (in ms)</label>
 			<label index="tx_caretakerselenium_server.selftestInstanceUid">Selftest Instance (optional)</label>
 			
 		</languageKey>

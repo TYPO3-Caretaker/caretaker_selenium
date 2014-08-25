@@ -1,0 +1,6 @@
+[submodule "vendor/php-webdriver"]
+	path = vendor/php-webdriver
+	url = https://github.com/facebook/php-webdriver.git
+[submodule "vendor/php-selenese"]
+	path = vendor/php-selenese
+	url = https://github.com/wiro-consultants/php-selenese.git

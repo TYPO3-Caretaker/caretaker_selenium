@@ -106,6 +106,21 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 	
 	public function runTest(){
 		
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['caretaker_selenium']);
+
+		$screenshotPath = null;
+		if (isset($extConf['screenshot.']['path'])) {
+			$screenshotPath = $extConf['screenshot.']['path'];
+			if (substr($extConf['screenshot.']['path'], 0, 1) !== '/') {
+				$screenshotPath = PATH_site . $extConf['screenshot.']['path'];
+			}
+
+			if (!is_writable($screenshotPath)) {
+				$screenshotPath = null;
+			}
+		}
+		$screenshotUrl = (isset($extConf['screenshot.']['url'])) ? $extConf['screenshot.']['url'] : null;
+
 		$commands     = $this->getConfigValue('selenium_configuration');
 		$error_time   = $this->getConfigValue('response_time_error');
 		$warning_time = $this->getConfigValue('response_time_warning');
@@ -120,14 +135,21 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				'uid' => $server['uid'],
 				'title' => $server['title'],
 				'host'    => $server['host'],
-				'browser' => $server['browser']
+				'browser' => $server['browser'],
+				'browserWidth' => $server['browserWidth'],
+				'browserHeight' => $server['browserHeight'],
+				'connectTimeout' => $server['connectTimeout']
 			);
 		} else {
 			$server_ids = explode(',',$server);
 			
 			foreach($server_ids as $sid) {
 				
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_caretakerselenium_server', 'deleted=0 AND hidden=0 AND uid='.$sid);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'*',
+					'tx_caretakerselenium_server',
+					'deleted=0 AND hidden=0 AND uid='.$sid
+				);
 				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				if ($row){
 
@@ -160,14 +182,20 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 							'uid' => $sid,
 							'title' => $row['title'],
 							'host'    => $row['hostname'],
-							'browser' => $row['browser']
+							'browser' => $row['browser'],
+							'browserWidth' => $row['browserWidth'],
+							'browserHeight' => $row['browserHeight'],
+							'connectTimeout' => $row['connectTimeout']
 						);
 					} else {
 						$inactiveServers[] = array(
 							'uid' => $sid,
 							'title' => $row['title'],
 							'host'    => $row['hostname'],
-							'browser' => $row['browser']
+							'browser' => $row['browser'],
+							'browserWidth' => $row['browserWidth'],
+							'browserHeight' => $row['browserHeight'],
+							'connectTimeout' => $row['connectTimeout']
 						);
 					}
 				}
@@ -205,7 +233,17 @@ class tx_caretakerseleniumTestService extends tx_caretaker_TestServiceBase {
 				$this->setServerBusy($server['uid']);
 
 				try {
-					$test = new tx_caretakerselenium_SeleniumTest($commands,$server['browser'],$baseURL,$server['host']);
+					$test = new tx_caretakerselenium_SeleniumTest(
+						$commands,
+						$server['browser'],
+						$baseURL,
+						$server['host'],
+						$server['connectTimeout'],
+						$server['browserWidth'],
+						$server['browserHeight'],
+						$screenshotPath,
+						$screenshotUrl
+					);
 					list($success, $msg, $time) = $test->run();
 				} catch ( Exception $e ){
 					$success = false;
