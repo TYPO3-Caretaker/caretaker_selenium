@@ -19,7 +19,9 @@ class tx_caretakerselenium_SeleniumTest {
 	protected $browserHeight;
 
 	protected $baseURL;
+
 	protected $screenshotPath;
+	protected $screenshotUrl;
 
 	protected $commands = array();
 	protected $commandsText = '';
@@ -27,13 +29,14 @@ class tx_caretakerselenium_SeleniumTest {
 
 	protected $testSuccessful = true;
 
-	public function __construct($commands, $browser, $baseUrl, $host, $connectTimeout = 5000, $browserWidth = 1280, $browserHeight = 960, $screenshotPath = null) {
+	public function __construct($commands, $browser, $baseUrl, $host, $connectTimeout = 5000, $browserWidth = 1280, $browserHeight = 960, $screenshotPath = null, $screenshotUrl = null) {
 		// Selenium server information
 		$this->host = $host;
 		$this->connectTimeout = $connectTimeout;
 		$this->browser = $browser;
 		$this->browserWidth = $browserWidth;
 		$this->browserHeight = $browserHeight;
+		$this->screenshotUrl = $screenshotUrl;
 
 		// Selenium commands
 		$this->commandsText = $commands;
@@ -203,12 +206,12 @@ class tx_caretakerselenium_SeleniumTest {
 					$msg .= ' Comment: '.$command->comment."\n";
 				}
 
-				if ($this->screenshotPath) {
+				if ($this->screenshotPath && $this->screenshotUrl) {
 					$screenshot = $this->sel->takeScreenshot();
-					$filename = $this->screenshotPath . md5($screenshot) . '.png';
-					file_put_contents($filename, $screenshot);
+					$filename = md5($screenshot) . '.png';
+					file_put_contents($this->screenshotPath . $filename, $screenshot);
 
-					$msg .= ' Screenshot: ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . str_replace(PATH_site, '', $filename);
+					$msg .= ' Screenshot: ' . sprintf($this->screenshotUrl, $filename);
 				}
 			}
 

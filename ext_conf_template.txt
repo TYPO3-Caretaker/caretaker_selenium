@@ -1,6 +1,9 @@
 # cat=screenshot; type=string; label= Path where screenshots should be stored
 screenshot.path =
 
+# cat=screenshot; type=string; label= URL to open screenshots from notification mail, %s will be replaced with filename
+screenshot.url =
+
 # cat=unittest/http; type=string; label= Host of Selenium Server for Unittest
 unittest.host = localhost
 
